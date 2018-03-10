@@ -1,9 +1,13 @@
 package handlers
 
-import "github.com/labstack/echo"
+import (
+	"../../db"
+	"github.com/labstack/echo"
+)
 
 func GetRooms(c echo.Context) error {
-
+	db.Set()
+	return
 }
 
 func PostRooms(c echo.Context) error {
