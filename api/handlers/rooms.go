@@ -6,7 +6,7 @@ import (
 )
 
 func GetRooms(c echo.Context) error {
-	db.Set()
+	db.GetRoom()
 	return
 }
 

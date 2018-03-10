@@ -6,25 +6,56 @@ import (
 	"github.com/go-redis/redis"
 )
 
-var client *redis.Client
+var (
+	roomClient *redis.Client
+	gameClient *redis.Client
+)
 
 func init() {
-	client = redis.NewClient(&redis.Options{
+	roomClient = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
 
-	_, err := client.Ping().Result()
+	_, err := roomClient.Ping().Result()
+	if err != nil {
+		panic(fmt.Sprintf("Initialize redis error:%v", err))
+	}
+
+	gameClient = redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       1,  // use default DB
+	})
+
+	_, err = gameClient.Ping().Result()
 	if err != nil {
 		panic(fmt.Sprintf("Initialize redis error:%v", err))
 	}
 }
 
-func Set(key string, value interface{}) error {
-	return client.Set(key, value, 0).Err()
+func SetRoom(key string, value interface{}) error {
+	return roomClient.Set(key, value, 0).Err()
 }
 
-func Get(key string) (string, error) {
-	return client.Get(key).Result()
+func GetRoom(key string) (string, error) {
+	return roomClient.Get(key).Result()
+}
+
+func GetRooms() (string, error) {
+	Get := func(client *redis.Client) *redis.StringCmd {
+		cmd := redis.NewStringCmd("key *")
+		client.Process(cmd)
+		return cmd
+	}
+	return Get(roomClient).Result()
+}
+
+func SetGame(key string, value interface{}) error {
+	return gameClient.Set(key, value, 0).Err()
+}
+
+func GetGame(key string) (string, error) {
+	return gameClient.Get(key).Result()
 }
