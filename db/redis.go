@@ -39,18 +39,18 @@ func SetRoom(key string, value interface{}) error {
 	return roomClient.Set(key, value, 0).Err()
 }
 
-func GetRoom(key string) (string, error) {
-	return roomClient.Get(key).Result()
-}
+// func GetRoom(key string) (string, error) {
+// 	return roomClient.Get(key).Result()
+// }
 
-func GetRooms() (string, error) {
-	Get := func(client *redis.Client) *redis.StringCmd {
-		cmd := redis.NewStringCmd("key *")
-		client.Process(cmd)
-		return cmd
-	}
-	return Get(roomClient).Result()
-}
+// func GetRooms() (string, error) {
+// 	Get := func(client *redis.Client) *redis.StringCmd {
+// 		cmd := redis.NewStringCmd("key *")
+// 		client.Process(cmd)
+// 		return cmd
+// 	}
+// 	return Get(roomClient).Result()
+// }
 
 func SetGame(key string, value interface{}) error {
 	return gameClient.Set(key, value, 0).Err()
