@@ -13,7 +13,9 @@ var (
 	database *mgo.Database
 )
 
-type DbBase struct{}
+type DbBase struct {
+	CollectionName string
+}
 
 func init() {
 	session, err := mgo.Dial(fmt.Sprintf("mongodb://%s:%d", DBCONFIG.Host, DBCONFIG.Port))
