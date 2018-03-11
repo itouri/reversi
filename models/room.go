@@ -1,8 +1,9 @@
 package models
 
 type Room struct {
-	PlayerIds      []string `validate:"required"`
-	SpectatorNames []string `validate:"required"`
+	RoomId         string   `bson:"room_id" validate:"required"`
+	PlayerIds      []string `bson:"player_ids" validate:"required"`
+	SpectatorNames []string `bson:"spector_names"`
 }
 
 func (r *Room) String() string {

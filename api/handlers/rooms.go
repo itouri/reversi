@@ -14,7 +14,7 @@ func GetRooms(c echo.Context) error {
 	dbb := &db.DbBase{}
 	room := &models.Room{}
 	rooms := []models.Room{}
-	err := dbb.Collection(room.String()).Find(nil).All(rooms)
+	err := dbb.Collection(room.String()).Find(nil).All(&rooms)
 	if err != nil {
 		return c.NoContent(http.StatusOK)
 	}
@@ -25,9 +25,16 @@ func PostRooms(c echo.Context) error {
 	dbb := &db.DbBase{}
 	room := &models.Room{}
 
-	name := c.QueryParam("name")
+	roomID := c.QueryParam("room_id")
+	if roomID == "" {
+		roomID = uuid.Must(uuid.NewV4()).String()
+	}
 
-	roomID := uuid.Must(uuid.NewV4()).String()
+	name := c.QueryParam("name")
+	if name == "" {
+		return c.String(http.StatusBadRequest, "Name is required")
+	}
+
 	query := bson.M{"room_id": roomID}
 
 	// TODO upsertのやりかたが間違ってる
