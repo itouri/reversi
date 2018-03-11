@@ -23,11 +23,33 @@ func GetRooms(c echo.Context) error {
 
 func PostRooms(c echo.Context) error {
 	dbb := &db.DbBase{}
+
+	name := c.QueryParam("name")
+	if name == "" {
+		return c.String(http.StatusBadRequest, "Name is required")
+	}
+
+	roomID := uuid.Must(uuid.NewV4()).String()
+	room := &models.Room{
+		RoomId: roomID,
+		PlayerIds: []string{
+			name,
+		},
+	}
+	err := dbb.Collection(room.String()).Insert(room)
+	if err != nil {
+		return c.NoContent(http.StatusOK)
+	}
+	return c.NoContent(http.StatusOK)
+}
+
+func PutRooms(c echo.Context) error {
+	dbb := &db.DbBase{}
 	room := &models.Room{}
 
 	roomID := c.QueryParam("room_id")
 	if roomID == "" {
-		roomID = uuid.Must(uuid.NewV4()).String()
+		return c.String(http.StatusBadRequest, "room_id is required")
 	}
 
 	name := c.QueryParam("name")
@@ -55,7 +77,3 @@ func PostRooms(c echo.Context) error {
 	}
 	return c.NoContent(http.StatusOK)
 }
-
-// func PutRooms(c echo.Context) error {
-
-// }
