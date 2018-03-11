@@ -12,8 +12,9 @@ import (
 
 func GetRooms(c echo.Context) error {
 	dbb := &db.DbBase{}
+	room := &models.Room{}
 	rooms := []models.Room{}
-	err := dbb.Collection(rooms[0].String()).Find(nil).All(rooms)
+	err := dbb.Collection(room.String()).Find(nil).All(rooms)
 	if err != nil {
 		return c.NoContent(http.StatusOK)
 	}
@@ -48,6 +49,6 @@ func PostRooms(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
-func PutRooms(c echo.Context) error {
+// func PutRooms(c echo.Context) error {
 
-}
+// }

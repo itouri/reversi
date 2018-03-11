@@ -21,7 +21,6 @@ var (
 	DBCONFIG  *Db
 )
 
-// init()は勝手に呼ばれる
 func init() {
 	APPCONFIG = &App{
 		Name:  "amazon",

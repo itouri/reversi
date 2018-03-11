@@ -18,7 +18,7 @@ func main() {
 
 	e.GET("/api/v1/rooms", handlers.GetRooms)
 	e.POST("/api/v1/rooms", handlers.PostRooms)
-	e.PUT("/api/v1/rooms/:id", handlers.UpdateRooms)
+	// e.PUT("/api/v1/rooms/:id", handlers.UpdateRooms)
 
 	// Start server
 	//e.Run(standard.New(":1323"))
