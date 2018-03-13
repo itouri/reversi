@@ -16,7 +16,7 @@ func GetRooms(c echo.Context) error {
 	rooms := []models.Room{}
 	err := dbb.Collection(room.String()).Find(nil).All(&rooms)
 	if err != nil {
-		return c.NoContent(http.StatusOK)
+		return c.String(http.StatusOK, err.Error())
 	}
 	return c.JSON(http.StatusOK, rooms)
 }
