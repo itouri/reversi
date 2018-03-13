@@ -39,3 +39,10 @@ Room->Room:register player
 Room->Game:validation result
 Client->Game:exit(room_id)
 ```
+
+## Arch of websocket room
+### original gorilla's arch of hub
+![](origi_arch.png) 
+
+### Expanded arch to add function of room
+![](expanded_arch.png) 
