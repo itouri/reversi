@@ -29,7 +29,7 @@ state :int
 
 シーケンス図
 
-![arch.png](./arch.png)
+![arch.png](doc/img/arch.png)
 ```sequence
 Client->Room:GetRooms()
 Room->Client:Rooms
@@ -42,7 +42,7 @@ Client->Game:exit(room_id)
 
 ## Arch of websocket room
 ### original gorilla's arch of hub
-![](origi_arch.png) 
+![](doc/img/origi_arch.png) 
 
 ### Expanded arch to add function of room
-![](expanded_arch.png) 
+![](doc/img/expanded_arch.png) 
