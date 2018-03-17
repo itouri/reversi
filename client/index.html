@@ -19,7 +19,7 @@
     uri += '//' + loc.host;
     uri += loc.pathname + 'ws';
 
-    path = "ws://localhost:12345/ws?room=4"
+    path = "ws://localhost:12345/ws?room=5"
 
     ws = new WebSocket(path)
 
@@ -33,7 +33,7 @@
     }
 
     setInterval(function() {
-      ws.send('Hello, Server!');
+      ws.send("I'm alice!");
     }, 1000);
   </script>
 </body>

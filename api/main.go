@@ -2,6 +2,7 @@ package main
 
 import (
 	"./handlers"
+	"./handlers/ws"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -23,6 +24,7 @@ func main() {
 
 	e.GET("/api/v1/rooms", handlers.GetRooms)
 
+	ws.RunHab()
 	e.GET("/ws", handlers.GetWs)
 
 	// Start server

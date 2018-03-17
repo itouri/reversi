@@ -24,7 +24,7 @@ var h = hub{
 }
 
 func RunHab() {
-	h.run()
+	go h.run()
 }
 
 func (h *hub) run() {
