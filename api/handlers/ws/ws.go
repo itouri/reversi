@@ -4,8 +4,6 @@ import (
 	"log"
 	"net/http"
 	"time"
-
-	"github.com/gorilla/mux"
 )
 
 const (
@@ -28,18 +26,23 @@ type message struct {
 }
 
 // serveWs handles websocket requests from the peer.
-func ServeWs(w http.ResponseWriter, r *http.Request) {
+func ServeWs(w http.ResponseWriter, r *http.Request) error {
 	ws, err := upgrader.Upgrade(w, r, nil)
-	vars := mux.Vars(r)
-	log.Println(vars["room"])
+	vars := r.URL.Query()
+	rooms, ok := vars["room"]
+	log.Println(rooms)
+	var room string
+	if ok && len(rooms) >= 1 {
+		room = rooms[0]
+	}
 	if err != nil {
-		log.Println(err)
-		return
+		return err
 	}
 	c := &connection{send: make(chan []byte, 256), ws: ws}
-	s := subscription{c, vars["room"]}
+	s := subscription{c, room}
 	h.register <- s
 	go s.writePump()
 	// XXX なぜもとのやつに go がない?
 	go s.readPump()
+	return nil
 }

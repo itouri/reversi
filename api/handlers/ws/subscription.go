@@ -23,7 +23,9 @@ func (s subscription) readPump() {
 	c.ws.SetReadDeadline(time.Now().Add(pongWait))
 	c.ws.SetPongHandler(func(string) error { c.ws.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
+		log.Print("Waiting for msg") //!!!
 		_, msg, err := c.ws.ReadMessage()
+		log.Printf("msg: %v", msg) //!!!
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway) {
 				log.Printf("error: %v", err)
