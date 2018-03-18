@@ -15,7 +15,6 @@ export class RoomsComponent implements OnInit {
 
   ngOnInit() {
     this.getRooms();
-    this.player_name = 'angular';
   }
 
   getRooms(): void {
@@ -25,10 +24,14 @@ export class RoomsComponent implements OnInit {
   }
 
   onClickCreate(): void {
-    this.roomService.createRoom(this.player_name).subscribe();
+    if (!this.player_name) { return; }
+    this.roomService.createRoom(this.player_name)
+    .subscribe(() => { this.getRooms(); });
   }
 
   onClickEnter(room_id: string): void {
-    this.roomService.enterRoom(room_id, this.player_name).subscribe();
+    if (!this.player_name) { return; }
+    this.roomService.enterRoom(room_id, this.player_name)
+    .subscribe(() => { this.getRooms(); });
   }
 }

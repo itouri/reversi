@@ -1,11 +1,12 @@
+<div>
+  <label>Player Name:
+      <input [(ngModel)]="player_name" placeholder="Please input your name!">
+  </label>
+</div>
 <div class="rooms">
   <button class="btn_create" (click)="onClickCreate()">CREATE</button>
   <div class="room" *ngFor="let room of rooms">
-    <!-- <div *ngIf="room.PlayerNames[0]; then thenBlock1 else elseBlock1"></div>
-    <ng-template #thenBlock1><span class="player1">{{room.PlayerNames[0]}}</span></ng-template>
-    <ng-template #elseBlock1><button class="btn_enter">ENTER</button></ng-template> -->
     <span class="player1">{{room.PlayerNames[0]}}</span>
-
     <img class="battle-icon" src="assets/image/battle_icon.png">
 
     <div *ngIf="room.PlayerNames[1]; then thenBlock2 else elseBlock2"></div>
