@@ -9,7 +9,7 @@
 
     <div *ngIf="room.PlayerNames[1]; then thenBlock2 else elseBlock2"></div>
     <ng-template #thenBlock2><span class="player2">{{room.PlayerNames[1]}}</span></ng-template>
-    <ng-template #elseBlock2><button class="btn_enter">ENTER</button></ng-template>
+    <ng-template #elseBlock2><button class="btn_enter" (click)="onClick(room.RoomID)">ENTER</button></ng-template>
 
     <p class="spectator-num">{{room.SpectatorNames.length}}</p>
   </div>

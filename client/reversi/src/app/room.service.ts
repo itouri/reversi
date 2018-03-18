@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { catchError } from 'rxjs/operators';
 
 import { Room } from './room';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable()
 export class RoomService {
@@ -15,7 +19,16 @@ export class RoomService {
   getRooms(): Observable<Room[]> {
     return this.http.get<Room[]>(this.roomUrl)
     .pipe(
-      catchError(this.handleError('getHeroes', []))
+      catchError(this.handleError('getRooms', []))
+    );
+  }
+
+  enterRoom(room_id, player_name): Observable<any> {
+    // TODO もっとイケてる方法がある
+    const url = this.roomUrl + '?room_id=' + room_id + '&player_name=' + player_name;
+    console.log(url);
+    return this.http.put(url, room_id).pipe(
+      catchError(this.handleError<any>('enterRoom'))
     );
   }
 

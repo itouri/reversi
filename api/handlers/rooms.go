@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 
 	"../../db"
@@ -24,16 +25,16 @@ func GetRooms(c echo.Context) error {
 func PostRooms(c echo.Context) error {
 	dbb := &db.DbBase{}
 
-	name := c.QueryParam("name")
-	if name == "" {
-		return c.String(http.StatusBadRequest, "Name is required")
+	player_name := c.QueryParam("player_name")
+	if player_name == "" {
+		return c.String(http.StatusBadRequest, "player_name is required")
 	}
 
 	roomID := uuid.Must(uuid.NewV4()).String()
 	room := &models.Room{
 		RoomID: roomID,
 		PlayerNames: []string{
-			name,
+			player_name,
 		},
 	}
 	err := dbb.Collection(room.String()).Insert(room)
@@ -49,12 +50,14 @@ func PutRooms(c echo.Context) error {
 
 	roomID := c.QueryParam("room_id")
 	if roomID == "" {
+		log.Println("room_id is required")
 		return c.String(http.StatusBadRequest, "room_id is required")
 	}
 
-	name := c.QueryParam("name")
-	if name == "" {
-		return c.String(http.StatusBadRequest, "Name is required")
+	player_name := c.QueryParam("player_name")
+	if player_name == "" {
+		log.Println("player_name is required")
+		return c.String(http.StatusBadRequest, "player_name is required")
 	}
 
 	query := bson.M{"room_id": roomID}
@@ -62,15 +65,16 @@ func PutRooms(c echo.Context) error {
 	// TODO upsertのやりかたが間違ってる
 	err := dbb.Collection(room.String()).Find(query).One(room)
 	if err != nil {
+		log.Println(err)
 		return c.NoContent(http.StatusOK)
 	}
 
 	if len(room.PlayerNames) > 1 {
 		return c.String(http.StatusBadRequest, "This room is full")
 	}
-	room.PlayerNames = append(room.PlayerNames, name)
+	room.PlayerNames = append(room.PlayerNames, player_name)
 
-	upsert := bson.M{"$set": bson.M{"player_ids": room.PlayerNames}}
+	upsert := bson.M{"$set": bson.M{"player_names": room.PlayerNames}}
 	_, err = dbb.Collection(room.String()).Upsert(query, upsert)
 	if err != nil {
 		return c.NoContent(http.StatusOK)
