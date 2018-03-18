@@ -1,1 +1,12 @@
 <h1>Game</h1>
+<table class="field">
+  <tr *ngFor="let row of field; index as i">
+    <td *ngFor="let cell of row; index as j" (click)="onClickCell(j, i)">{{stone[cell]}}</td>
+  </tr>
+</table>
+<p>{{stone[1]}}: {{blackNum}}</p>
+<p>{{stone[-1]}}: {{whiteNum}}</p>
+
+<div *ngIf="turn === 0; then thenBlock else elseBlock"></div>
+  <ng-template #thenBlock><button *ngIf="turn === 0" (click)="init()">REMATCH</button></ng-template>
+  <ng-template #elseBlock><p>turn: {{stone[turn]}}</p></ng-template>
