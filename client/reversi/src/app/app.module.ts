@@ -7,12 +7,14 @@ import { AppComponent } from './app.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { RoomService } from './room.service';
 import { AppRoutingModule } from './/app-routing.module';
+import { GameComponent } from './game/game.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    RoomsComponent
+    RoomsComponent,
+    GameComponent
   ],
   imports: [
     BrowserModule,
