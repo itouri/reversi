@@ -1,5 +1,9 @@
-<ul class="rooms">
-  <li *ngFor="let room of rooms">
-    <span class="badge">{{room.RoomID}}</span>
-  </li>
-</ul>
+<div class="rooms">
+  <div class="room" *ngFor="let room of rooms">
+    <span class="player1">{{room.PlayerNames[0]}}</span>
+    <img class="battle-icon" src="assets/image/battle_icon.png">
+    <span class="player2">{{room.PlayerNames[1]}}</span>
+
+    <p class="spectator-num">{{room.SpectatorNames.length}}</p>
+  </div>
+</div>
