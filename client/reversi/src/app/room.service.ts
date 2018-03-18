@@ -5,6 +5,7 @@ import { of } from 'rxjs/observable/of';
 import { catchError } from 'rxjs/operators';
 
 import { Room } from './room';
+import { StaticInjector } from '@angular/core/src/di/injector';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -20,6 +21,13 @@ export class RoomService {
     return this.http.get<Room[]>(this.roomUrl)
     .pipe(
       catchError(this.handleError('getRooms', []))
+    );
+  }
+
+  createRoom(player_name: string): Observable<any> {
+    const url = this.roomUrl + '?player_name=' + player_name;
+    return this.http.post(url, '').pipe(
+      catchError(this.handleError<any>('createRoom'))
     );
   }
 

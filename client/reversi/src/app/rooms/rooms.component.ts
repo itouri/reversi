@@ -24,7 +24,11 @@ export class RoomsComponent implements OnInit {
     .subscribe(rooms => this.rooms = rooms);
   }
 
-  onClick(room_id: string): void {
-    this.roomService.enterRoom(room_id, this.player_name);
+  onClickCreate(): void {
+    this.roomService.createRoom(this.player_name).subscribe();
+  }
+
+  onClickEnter(room_id: string): void {
+    this.roomService.enterRoom(room_id, this.player_name).subscribe();
   }
 }

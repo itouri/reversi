@@ -27,6 +27,7 @@ func PostRooms(c echo.Context) error {
 
 	player_name := c.QueryParam("player_name")
 	if player_name == "" {
+		log.Println("player_name is required")
 		return c.String(http.StatusBadRequest, "player_name is required")
 	}
 
