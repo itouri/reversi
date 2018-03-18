@@ -1,8 +1,8 @@
 package models
 
 type Room struct {
-	RoomId         string   `bson:"room_id" validate:"required"`
-	PlayerIds      []string `bson:"player_ids" validate:"required"`
+	RoomID         string   `bson:"room_id" validate:"required"`
+	PlayerNames    []string `bson:"player_names" validate:"required"`
 	SpectatorNames []string `bson:"spector_names"`
 }
 

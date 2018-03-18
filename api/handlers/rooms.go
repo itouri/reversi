@@ -31,8 +31,8 @@ func PostRooms(c echo.Context) error {
 
 	roomID := uuid.Must(uuid.NewV4()).String()
 	room := &models.Room{
-		RoomId: roomID,
-		PlayerIds: []string{
+		RoomID: roomID,
+		PlayerNames: []string{
 			name,
 		},
 	}
@@ -65,12 +65,12 @@ func PutRooms(c echo.Context) error {
 		return c.NoContent(http.StatusOK)
 	}
 
-	if len(room.PlayerIds) > 1 {
+	if len(room.PlayerNames) > 1 {
 		return c.String(http.StatusBadRequest, "This room is full")
 	}
-	room.PlayerIds = append(room.PlayerIds, name)
+	room.PlayerNames = append(room.PlayerNames, name)
 
-	upsert := bson.M{"$set": bson.M{"player_ids": room.PlayerIds}}
+	upsert := bson.M{"$set": bson.M{"player_ids": room.PlayerNames}}
 	_, err = dbb.Collection(room.String()).Upsert(query, upsert)
 	if err != nil {
 		return c.NoContent(http.StatusOK)

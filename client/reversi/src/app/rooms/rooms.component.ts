@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { RoomService } from '../room.service';
+import { Room } from '../room';
 
 @Component({
   selector: 'app-rooms',
@@ -6,10 +8,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./rooms.component.css']
 })
 export class RoomsComponent implements OnInit {
+  rooms: Room[];
 
-  constructor() { }
+  constructor(private roomService: RoomService) { }
 
   ngOnInit() {
+    this.getRooms();
   }
 
+  getRooms(): void {
+    this.roomService.getRooms()
+    // .subscribe(function(rooms) { this.rooms = rooms; console.log(this.rooms); } );
+    .subscribe(rooms => this.rooms = rooms);
+  }
 }
