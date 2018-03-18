@@ -82,3 +82,57 @@ func PutRooms(c echo.Context) error {
 	}
 	return c.NoContent(http.StatusOK)
 }
+
+func ExitRoom(c echo.Context) error {
+	dbb := &db.DbBase{}
+	room := &models.Room{}
+
+	roomID := c.Param("room_id")
+	if roomID == "" {
+		log.Println("room_id is required")
+		return c.String(http.StatusBadRequest, "room_id is required")
+	}
+
+	player_name := c.Param("player_name")
+	if player_name == "" {
+		log.Println("player_name is required")
+		return c.String(http.StatusBadRequest, "player_name is required")
+	}
+
+	query := bson.M{"room_id": roomID}
+
+	// TODO upsertのやりかたが間違ってる
+	err := dbb.Collection(room.String()).Find(query).One(room)
+	if err != nil {
+		log.Println(err)
+		return c.NoContent(http.StatusOK)
+	}
+
+	if len(room.PlayerNames) == 1 {
+		deleteRoom(roomID)
+		return c.NoContent(http.StatusOK)
+	}
+	room.PlayerNames = append(room.PlayerNames, player_name)
+
+	// TODO
+	upsert := bson.M{"$unset": bson.M{"player_names": room.PlayerNames}}
+	_, err = dbb.Collection(room.String()).Upsert(query, upsert)
+	if err != nil {
+		return c.NoContent(http.StatusOK)
+	}
+	return c.NoContent(http.StatusOK)
+}
+
+func deleteRoom(roomID string) error {
+	dbb := &db.DbBase{}
+	room := &models.Room{}
+
+	query := bson.M{"room_id": roomID}
+
+	err := dbb.Collection(room.String()).Remove(query)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
