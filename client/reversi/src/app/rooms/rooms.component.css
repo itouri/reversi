@@ -33,6 +33,7 @@ p {
   line-height: 7em;
   vertical-align: middle;
   text-align:center;
+  float: right;
   padding: 0;
   width: 33%;
 }
@@ -41,7 +42,7 @@ p {
   display: inline-block;
   line-height: 7em;
   vertical-align: middle;
-  text-align:center;
+  text-align: center;
   padding: 0;
   width: 30%;
   height: 5em
@@ -51,6 +52,13 @@ p {
   padding: 0;
   width: 5em;
   text-align:center;
+}
+
+.rooms .room .btn_enter {
+  vertical-align: middle;
+  text-align: center;
+  padding: 0;
+  width: 33%;
 }
 
 .rooms li {

@@ -1,8 +1,15 @@
 <div class="rooms">
   <div class="room" *ngFor="let room of rooms">
+    <!-- <div *ngIf="room.PlayerNames[0]; then thenBlock1 else elseBlock1"></div>
+    <ng-template #thenBlock1><span class="player1">{{room.PlayerNames[0]}}</span></ng-template>
+    <ng-template #elseBlock1><button class="btn_enter">ENTER</button></ng-template> -->
     <span class="player1">{{room.PlayerNames[0]}}</span>
+
     <img class="battle-icon" src="assets/image/battle_icon.png">
-    <span class="player2">{{room.PlayerNames[1]}}</span>
+
+    <div *ngIf="room.PlayerNames[1]; then thenBlock2 else elseBlock2"></div>
+    <ng-template #thenBlock2><span class="player2">{{room.PlayerNames[1]}}</span></ng-template>
+    <ng-template #elseBlock2><button class="btn_enter">ENTER</button></ng-template>
 
     <p class="spectator-num">{{room.SpectatorNames.length}}</p>
   </div>
