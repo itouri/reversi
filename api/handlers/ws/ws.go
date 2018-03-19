@@ -1,7 +1,6 @@
 package ws
 
 import (
-	"log"
 	"net/http"
 	"time"
 )
@@ -25,21 +24,27 @@ type message struct {
 	room string
 }
 
+func parse(key string, vars map[string][]string) string {
+	vals, ok := vars[key]
+	var val string
+	if ok && len(vals) >= 1 {
+		val = vals[0]
+	}
+	return val
+}
+
 // serveWs handles websocket requests from the peer.
 func ServeWs(w http.ResponseWriter, r *http.Request) error {
 	ws, err := upgrader.Upgrade(w, r, nil)
-	vars := r.URL.Query()
-	rooms, ok := vars["room"]
-	log.Println(rooms)
-	var room string
-	if ok && len(rooms) >= 1 {
-		room = rooms[0]
-	}
 	if err != nil {
 		return err
 	}
+	vars := r.URL.Query()
+	room_id := parse("room_id", vars)
+	// player_name := parse("player_name", vars)
+
 	c := &connection{send: make(chan []byte, 256), ws: ws}
-	s := subscription{c, room}
+	s := subscription{c, room_id}
 	h.register <- s
 	go s.writePump()
 	// XXX なぜもとのやつに go がない?
