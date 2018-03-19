@@ -10,6 +10,8 @@ import { RoomsComponent } from './rooms/rooms.component';
 import { RoomService } from './room.service';
 import { AppRoutingModule } from './/app-routing.module';
 import { GameComponent } from './game/game.component';
+import { ReversiService } from './reversi.service';
+import { WebSocketService } from './websocket.service';
 
 
 @NgModule({
@@ -25,7 +27,11 @@ import { GameComponent } from './game/game.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [RoomService],
+  providers: [
+    RoomService,
+    ReversiService,
+    WebSocketService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
