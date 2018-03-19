@@ -42,7 +42,7 @@ func PostRooms(c echo.Context) error {
 	if err != nil {
 		return c.NoContent(http.StatusOK)
 	}
-	return c.NoContent(http.StatusOK)
+	return c.JSON(http.StatusOK, roomID)
 }
 
 func PutRooms(c echo.Context) error {

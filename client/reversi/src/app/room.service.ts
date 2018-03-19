@@ -24,10 +24,10 @@ export class RoomService {
     );
   }
 
-  createRoom(player_name: string): Observable<any> {
+  createRoom(player_name: string): Observable<string> {
     const url = this.roomUrl + '?player_name=' + player_name;
-    return this.http.post(url, '').pipe(
-      catchError(this.handleError<any>('createRoom'))
+    return this.http.post<string>(url, '').pipe(
+      catchError(this.handleError<string>('createRoom'))
     );
   }
 

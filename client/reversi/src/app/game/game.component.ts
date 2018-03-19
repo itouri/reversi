@@ -27,14 +27,14 @@ export class GameComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.params.forEach((params: Params) => {
+    this.route.queryParams.forEach((params: Params) => {
       this.room_id = params['room_id'];
     });
 
     this.route.queryParams.forEach((params: Params) => {
       this.player_name = params['player_name'];
     });
-
+    console.log(this.room_id);
     this.init();
     this.initWebsocket();
   }

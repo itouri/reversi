@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RoomService } from '../room.service';
 import { Room } from '../room';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-rooms',
@@ -11,7 +12,10 @@ export class RoomsComponent implements OnInit {
   rooms: Room[];
   player_name: string;
 
-  constructor(private roomService: RoomService) { }
+  constructor(
+    private roomService: RoomService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.getRooms();
@@ -26,12 +30,12 @@ export class RoomsComponent implements OnInit {
   onClickCreate(): void {
     if (!this.player_name) { return; }
     this.roomService.createRoom(this.player_name)
-    .subscribe(() => { this.getRooms(); });
+    .subscribe(roomID => { this.router.navigateByUrl(`/game?room_id=${roomID}`); });
   }
 
   onClickEnter(room_id: string): void {
     if (!this.player_name) { return; }
     this.roomService.enterRoom(room_id, this.player_name)
-    .subscribe(() => { this.getRooms(); });
+    .subscribe(() => { this.router.navigateByUrl(`/game?room_id=${room_id}&player_name=${this.player_name}`); }); // TODO もっといいリダイレクトの方法
   }
 }
