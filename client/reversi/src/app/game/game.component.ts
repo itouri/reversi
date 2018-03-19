@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {ReversiService} from '../reversi.service';
 
 @Component({
@@ -23,7 +23,8 @@ export class GameComponent implements OnInit {
 
   constructor(
     private reversiService: ReversiService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -107,6 +108,10 @@ export class GameComponent implements OnInit {
     this.blackNum = this.whiteNum = 2;
 
     this.turn = 1;
+  }
+
+  onClickExit() {
+    this.router.navigateByUrl(`/rooms`);
   }
 
   onClickRematch() {
