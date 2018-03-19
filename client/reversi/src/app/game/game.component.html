@@ -8,5 +8,7 @@
 <p>{{stone[-1]}}: {{whiteNum}}</p>
 
 <div *ngIf="turn === 0; then thenBlock else elseBlock"></div>
-  <ng-template #thenBlock><button *ngIf="turn === 0" (click)="init()">REMATCH</button></ng-template>
+  <ng-template #thenBlock><button (click)="onClickRematch()">REMATCH</button></ng-template>
   <ng-template #elseBlock><p>turn: {{stone[turn]}}</p></ng-template>
+
+<button (click)="onClickRematch()">REMATCH</button>
