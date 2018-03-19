@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
 
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
+
 import { AppComponent } from './app.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { RoomService } from './room.service';
@@ -17,6 +19,7 @@ import { GameComponent } from './game/game.component';
     GameComponent
   ],
   imports: [
+    AngularFontAwesomeModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
