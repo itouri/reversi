@@ -4,8 +4,9 @@
     <td *ngFor="let cell of row; index as j" (click)="onClickCell(j, i)">{{stone[cell]}}</td>
   </tr>
 </table>
-<p>{{stone[1]}}: {{blackNum}}</p>
-<p>{{stone[-1]}}: {{whiteNum}}</p>
+<span>{{stone[1]}}: {{blackNum}}    {{stone[-1]}}: {{whiteNum}}</span>
+
+<p>MyColor: {{stone[myColor]}}</p>
 
 <div *ngIf="turn === 0; then thenBlock else elseBlock"></div>
   <ng-template #thenBlock><button (click)="onClickRematch()">REMATCH</button></ng-template>

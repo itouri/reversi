@@ -8,6 +8,7 @@ import {ReversiService} from '../reversi.service';
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
+  // TODO このクラスがやってること多すぎ
   stone: { [key: number]: string; } = {};
   field: number[][] = new Array();
   turn: number;
@@ -50,6 +51,7 @@ export class GameComponent implements OnInit {
   }
 
   stoneColor(myColor: string) {
+    console.log('mycolor:' + myColor);
     this.myColor = Number(myColor);
   }
 
@@ -70,6 +72,8 @@ export class GameComponent implements OnInit {
 
   initWebsocket() {
     this.reversiService.connect(this.room_id, this.player_name).subscribe(msg => {
+      // TODO もっといい方法ないのか?
+      console.log(msg);
       switch (msg.funcName) {
         case 'rematch':
           this.rematch();
@@ -91,6 +95,7 @@ export class GameComponent implements OnInit {
   }
 
   init() {
+    // TODO もっと美しい初期化方法はないの？
     for ( let i = 0; i < 8; i++ ) {
       this.field[i] = new Array();
       for ( let j = 0; j < 8; j++ ) {
@@ -120,11 +125,15 @@ export class GameComponent implements OnInit {
   }
 
   onClickCell(x: number, y: number) {
-    if (this.turn === 0) { return; }
+    if (this.turn === 0 || this.turn !== this.myColor) { return; }
     if (this.putStone(x, y, true)) {
       this.send('getStone', `${x}, ${y}`);
     }
-    // TODO 美しくない
+    this.isFinish();
+  }
+
+  countStone() {
+    // TODO もっといい数え方はないのか?
     let b = 0, w = 0;
     this.field.forEach(row => {
       row.forEach(cell => {
@@ -134,7 +143,6 @@ export class GameComponent implements OnInit {
     });
     this.blackNum = b;
     this.whiteNum = w;
-    this.isFinish();
   }
 
   isFinish() {
@@ -190,6 +198,7 @@ export class GameComponent implements OnInit {
       turnCell.forEach(cell => {
         this.field[cell[0]][cell[1]] *= -1;
       });
+      this.countStone();
     }
 
     return (turnCell.length === 0) ? false : true;
