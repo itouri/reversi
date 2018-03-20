@@ -84,6 +84,7 @@ func PutRooms(c echo.Context) error {
 }
 
 func ExitRoom(c echo.Context) error {
+	// TODO いちいちコレ書くの面倒
 	dbb := &db.DbBase{}
 	room := &models.Room{}
 

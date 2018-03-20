@@ -19,11 +19,25 @@ const (
 	maxMessageSize = 512
 )
 
-type message struct {
-	data []byte
-	room string
+type jsonReversi struct {
+	FuncName   string `json:"funcName"`
+	Body       string `json:"body"`
+	SystemFlag bool   `json:"systemFlag"`
 }
 
+// TODO room,dataの順? data,roomの順?
+type message struct {
+	room string
+	data []byte
+}
+
+type uniMessage struct {
+	room string
+	data []byte
+	conn *connection
+}
+
+// TODO この関数を gollira.muxを使ってなくす
 func parse(key string, vars map[string][]string) string {
 	vals, ok := vars[key]
 	var val string

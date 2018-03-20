@@ -9,6 +9,8 @@ type hub struct {
 	// Inbound messages from the connections.
 	broadcast chan message
 
+	unicast chan uniMessage
+
 	// Register requests from the connections.
 	register chan subscription
 
@@ -18,6 +20,7 @@ type hub struct {
 
 var h = hub{
 	broadcast:  make(chan message),
+	unicast:    make(chan uniMessage),
 	register:   make(chan subscription),
 	unregister: make(chan subscription),
 	rooms:      make(map[string]map[*connection]bool),
@@ -60,6 +63,11 @@ func (h *hub) run() {
 						delete(h.rooms, m.room)
 					}
 				}
+			}
+		case m := <-h.unicast:
+			select {
+			case m.conn.send <- m.data:
+				// TODO ここいる?
 			}
 		}
 	}
