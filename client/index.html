@@ -19,22 +19,32 @@
     uri += '//' + loc.host;
     uri += loc.pathname + 'ws';
 
-    path = "ws://localhost:12345/ws?room=5"
+    path = "ws://localhost:123456/ws?room=5"
 
-    ws = new WebSocket(path)
+    // ws = new WebSocket(path)
 
-    ws.onopen = function() {
-      console.log('Connected')
-    }
+    //ws.onopen = function() {
+    //  console.log('Connected')
+    //}
 
-    ws.onmessage = function(evt) {
-      var out = document.getElementById('output');
-      out.innerHTML += evt.data + '<br>';
-    }
+    //ws.onmessage = function(evt) {
+    // var out = document.getElementById('output');
+    //  out.innerHTML += evt.data + '<br>';
+    //}
 
-    setInterval(function() {
-      ws.send("I'm alice!");
-    }, 1000);
+    const request = new XMLHttpRequest();
+    const roomUrl = 'http://localhost:12345/api/v1/rooms';
+    const url = roomUrl + '?player_name=fff';
+    request.open("POST", url);
+    request.addEventListener("load", (event) => {
+    console.log(event.target.status); // => 200
+    console.log(event.target.responseText); // => "{...}"
+    });
+    request.send();
+
+    // setInterval(function() {
+    //   ws.send("I'm alice!");
+    // }, 1000);
   </script>
 </body>
 

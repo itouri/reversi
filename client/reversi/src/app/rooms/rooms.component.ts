@@ -32,7 +32,7 @@ export class RoomsComponent implements OnInit {
     if (!this.player_name) { return; }
     this.roomService.createRoom(this.player_id, this.player_name)
     .subscribe((resJSON) => {
-      console.log(resJSON);
+      console.log('resJSON', resJSON);
       if (this.player_id === undefined) {
         this.player_id = resJSON['PlayerID'];
       }

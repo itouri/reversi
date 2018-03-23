@@ -102,7 +102,8 @@ func PutRooms(c echo.Context) error {
 	if err != nil {
 		return c.NoContent(http.StatusOK)
 	}
-	return c.String(http.StatusOK, player_id)
+	// Stringで返してもAngular側で受け取れない！subsriberがJSONでmapしてるから(多分)
+	return c.JSON(http.StatusOK, player_id)
 }
 
 func ExitRoom(c echo.Context) error {
