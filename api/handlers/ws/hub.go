@@ -35,7 +35,7 @@ func RunHab() {
 	go h.run()
 }
 
-func sendExit(roomID string, playerID string, playerName string) {
+func sendExit(roomID string, playerID string) {
 	url := "http://localhost:12345/api/v1/rooms/" + roomID + "/" + playerID
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
@@ -62,7 +62,7 @@ func (h *hub) run() {
 			connections := h.rooms[s.room]
 			if connections != nil {
 				// TODO 接続解除の処理はここにあるべきなのか?
-				sendExit(s.room, s.player.ID, s.player.Name)
+				sendExit(s.room, s.player.ID)
 				if _, ok := connections[s.conn]; ok {
 					delete(connections, s.conn)
 					close(s.conn.send)

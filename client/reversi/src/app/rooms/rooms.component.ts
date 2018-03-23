@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class RoomsComponent implements OnInit {
   rooms: Room[];
   player_name: string;
+  player_id: string;
 
   constructor(
     private roomService: RoomService,
@@ -29,13 +30,24 @@ export class RoomsComponent implements OnInit {
 
   onClickCreate(): void {
     if (!this.player_name) { return; }
-    this.roomService.createRoom(this.player_name)
-    .subscribe(roomID => { this.router.navigateByUrl(`/game?room_id=${roomID}`); });
+    this.roomService.createRoom(this.player_id, this.player_name)
+    .subscribe((resJSON) => {
+      console.log(resJSON);
+      if (this.player_id === undefined) {
+        this.player_id = resJSON['PlayerID'];
+      }
+      this.router.navigateByUrl(`/game?room_id=${resJSON['RoomID']}&player_id=${this.player_id}&player_name=${this.player_name}`);
+    });
   }
 
   onClickEnter(room_id: string): void {
     if (!this.player_name) { return; }
-    this.roomService.enterRoom(room_id, this.player_name)
-    .subscribe(() => { this.router.navigateByUrl(`/game?room_id=${room_id}&player_name=${this.player_name}`); }); // TODO もっといいリダイレクトの方法
+    this.roomService.enterRoom(room_id, this.player_id, this.player_name)
+    .subscribe((player_id) => {
+      if (this.player_id === undefined) {
+        this.player_id = player_id;
+      }
+      this.router.navigateByUrl(`/game?room_id=${room_id}&player_id=${this.player_id}&player_name=${this.player_name}`);
+    }); // TODO もっといいリダイレクトの方法
   }
 }

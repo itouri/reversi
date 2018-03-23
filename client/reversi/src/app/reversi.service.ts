@@ -8,18 +8,17 @@ export class ReversiService {
 
   private messages: Subject<ReversiMessage>;
 
-  private roomUrl(room_id: string, player_name: string): string {
-    const player_id = document.cookie['player_id'];
-    console.log(document.cookie);
+  private roomUrl(room_id: string, player_id: string, player_name: string): string {
+    console.log('roomUrl', player_id);
     return `ws://localhost:12345/ws?room_id=${room_id}&player_name=${player_name}&player_id=${player_id}`;
   }
 
   constructor(private webSocketService: WebSocketService) {
   }
 
-  connect(roomNumber: string, name: string): Subject<ReversiMessage> {
+  connect(room_id: string, player_id: string, player_name: string): Subject<ReversiMessage> {
     return this.messages = <Subject<ReversiMessage>>this.webSocketService
-      .connect(this.roomUrl(roomNumber, name))
+      .connect(this.roomUrl(room_id, player_id, player_name))
       .map((response: MessageEvent): ReversiMessage => {
         const data = JSON.parse(response.data) as ReversiMessage;
         return data;

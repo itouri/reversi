@@ -32,11 +32,9 @@ func PostRooms(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "player_name is required")
 	}
 
-	var player_id string
-	var err error
-	if player_id, err = readCookie(c, "player_id"); err != nil {
+	player_id := c.QueryParam("player_id")
+	if player_id == "" {
 		player_id = uuid.Must(uuid.NewV4()).String()
-		writeCookie(c, "player_id", player_id)
 	}
 
 	roomID := uuid.Must(uuid.NewV4()).String()
@@ -49,11 +47,17 @@ func PostRooms(c echo.Context) error {
 			},
 		},
 	}
-	err = dbb.Collection(room.String()).Insert(room)
+	err := dbb.Collection(room.String()).Insert(room)
 	if err != nil {
 		return c.NoContent(http.StatusOK)
 	}
-	return c.JSON(http.StatusOK, roomID)
+
+	type res struct {
+		RoomID   string
+		PlayerID string
+	}
+
+	return c.JSON(http.StatusOK, res{roomID, player_id})
 }
 
 func PutRooms(c echo.Context) error {
@@ -72,6 +76,11 @@ func PutRooms(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "player_name is required")
 	}
 
+	player_id := c.QueryParam("player_id")
+	if player_id == "" {
+		player_id = uuid.Must(uuid.NewV4()).String()
+	}
+
 	query := bson.M{"room_id": roomID}
 
 	// TODO upsertのやりかたが間違ってる
@@ -85,12 +94,6 @@ func PutRooms(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "This room is full")
 	}
 
-	var player_id string
-	if player_id, err = readCookie(c, "player_id"); err != nil {
-		player_id = uuid.Must(uuid.NewV4()).String()
-		writeCookie(c, "player_id", player_id)
-	}
-
 	player := models.Player{player_id, player_name}
 	room.Players = append(room.Players, player)
 
@@ -99,7 +102,7 @@ func PutRooms(c echo.Context) error {
 	if err != nil {
 		return c.NoContent(http.StatusOK)
 	}
-	return c.NoContent(http.StatusOK)
+	return c.String(http.StatusOK, player_id)
 }
 
 func ExitRoom(c echo.Context) error {
@@ -187,7 +190,7 @@ func writeCookie(c echo.Context, key string, value string) {
 	// 1day
 	cookie.Expires = time.Now().Add(24 * time.Hour)
 	c.SetCookie(cookie)
-	log.Println("write cookie", key, value)
+	log.Println("writeCookie: ", key, value)
 }
 
 func readCookie(c echo.Context, key string) (string, error) {
@@ -195,6 +198,6 @@ func readCookie(c echo.Context, key string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	log.Println("read cookie", key, cookie.Value)
+	log.Println("readCookie: ", key, cookie.Value)
 	return cookie.Value, nil
 }

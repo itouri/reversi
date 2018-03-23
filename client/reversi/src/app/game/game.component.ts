@@ -14,6 +14,7 @@ export class GameComponent implements OnInit {
   turn: number;
   opponent: string;
 
+  player_id: string;
   player_name: string;
   room_id: string;
 
@@ -29,6 +30,7 @@ export class GameComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // TODO 絶対コンポーネント間で値を持ち回れるはず
     this.route.queryParams.forEach((params: Params) => {
       this.room_id = params['room_id'];
     });
@@ -36,7 +38,11 @@ export class GameComponent implements OnInit {
     this.route.queryParams.forEach((params: Params) => {
       this.player_name = params['player_name'];
     });
-    console.log(this.room_id);
+
+    this.route.queryParams.forEach((params: Params) => {
+      this.player_id = params['player_id'];
+    });
+    console.log(this.player_id);
     this.init();
     this.initWebsocket();
   }
@@ -71,7 +77,7 @@ export class GameComponent implements OnInit {
   }
 
   initWebsocket() {
-    this.reversiService.connect(this.room_id, this.player_name).subscribe(msg => {
+    this.reversiService.connect(this.room_id, this.player_id, this.player_name).subscribe(msg => {
       // TODO もっといい方法ないのか?
       console.log(msg);
       switch (msg.funcName) {

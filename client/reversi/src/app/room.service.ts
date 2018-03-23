@@ -24,16 +24,22 @@ export class RoomService {
     );
   }
 
-  createRoom(player_name: string): Observable<string> {
-    const url = this.roomUrl + '?player_name=' + player_name;
+  createRoom(player_id: string, player_name: string): Observable<string> {
+    let url = this.roomUrl + '?player_name=' + player_name;
+    if (player_id !== undefined) {
+      url += `&player_id=${player_id}`;
+    }
     return this.http.post<string>(url, '').pipe(
       catchError(this.handleError<string>('createRoom'))
     );
   }
 
-  enterRoom(room_id, player_name): Observable<any> {
+  enterRoom(room_id: string, player_id: string, player_name: string): Observable<any> {
     // TODO もっとイケてる方法がある
-    const url = this.roomUrl + '?room_id=' + room_id + '&player_name=' + player_name;
+    let url = this.roomUrl + '?room_id=' + room_id + '&player_name=' + player_name;
+    if (player_id !== undefined) {
+      url += `&player_id=${player_id}`;
+    }
     console.log(url);
     return this.http.put(url, room_id).pipe(
       catchError(this.handleError<any>('enterRoom'))
