@@ -5,12 +5,15 @@ import (
 	"log"
 	"time"
 
+	"../../../models"
+
 	"github.com/gorilla/websocket"
 )
 
 type subscription struct {
-	conn *connection
-	room string
+	conn   *connection
+	room   string
+	player *models.Player // TODO ここにplayerがあるべきなのか?
 }
 
 // TODO ここに具体的な処理を書かない
@@ -68,7 +71,6 @@ func (s subscription) readPump() {
 
 // writePump pumps messages from the hub to the websocket connection.
 func (s *subscription) writePump() {
-	log.Println("writePump") //!!!
 	c := s.conn
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {

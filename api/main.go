@@ -22,7 +22,7 @@ func main() {
 	e.POST("/api/v1/rooms", handlers.PostRooms)
 	e.PUT("/api/v1/rooms", handlers.PutRooms)
 
-	e.DELETE("/api/v1/rooms/:room_id/:player_id", handlers.ExitRoom)
+	e.DELETE("/api/v1/rooms/:room_id/:player_id/:player_name", handlers.ExitRoom)
 
 	ws.RunHab()
 	e.GET("/ws", handlers.GetWs)

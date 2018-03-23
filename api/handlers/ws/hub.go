@@ -1,5 +1,10 @@
 package ws
 
+import (
+	"log"
+	"net/http"
+)
+
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
 type hub struct {
@@ -30,6 +35,19 @@ func RunHab() {
 	go h.run()
 }
 
+func sendExit(roomID string, playerID string, playerName string) {
+	url := "http://localhost:12345/api/v1/rooms/" + roomID + "/" + playerID + "/" + playerName
+	req, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		log.Println(err)
+	}
+	client := new(http.Client)
+	_, err = client.Do(req)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
 func (h *hub) run() {
 	for {
 		select {
@@ -43,6 +61,8 @@ func (h *hub) run() {
 		case s := <-h.unregister:
 			connections := h.rooms[s.room]
 			if connections != nil {
+				// TODO 接続解除の処理はここにあるべきなのか?
+				sendExit(s.room, s.player.ID, s.player.Name)
 				if _, ok := connections[s.conn]; ok {
 					delete(connections, s.conn)
 					close(s.conn.send)

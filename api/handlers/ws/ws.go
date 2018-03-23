@@ -3,6 +3,8 @@ package ws
 import (
 	"net/http"
 	"time"
+
+	"../../../models"
 )
 
 const (
@@ -55,10 +57,12 @@ func ServeWs(w http.ResponseWriter, r *http.Request) error {
 	}
 	vars := r.URL.Query()
 	room_id := parse("room_id", vars)
-	// player_name := parse("player_name", vars)
+	player_name := parse("player_name", vars)
+	player_id := parse("player_id", vars)
 
 	c := &connection{send: make(chan []byte, 256), ws: ws}
-	s := subscription{c, room_id}
+	player := &models.Player{player_id, player_name}
+	s := subscription{c, room_id, player}
 	h.register <- s
 	go s.writePump()
 	// XXX なぜもとのやつに go がない?
