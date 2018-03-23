@@ -7,11 +7,11 @@
 <div class="rooms">
   <button class="btn_create" (click)="onClickCreate()">CREATE</button>
   <div class="room" *ngFor="let room of rooms">
-    <span class="player1">{{room.PlayerNames[0]}}</span>
+    <span class="player1">{{room.Players[0].Name}}</span>
     <img class="battle-icon" src="assets/image/battle_icon.png">
 
-    <div *ngIf="room.PlayerNames[1]; then thenBlock2 else elseBlock2"></div>
-    <ng-template #thenBlock2><span class="player2">{{room.PlayerNames[1]}}</span></ng-template>
+    <div *ngIf="room.Players[1]; then thenBlock2 else elseBlock2"></div>
+    <ng-template #thenBlock2><span class="player2">{{room.Players[1].Name}}</span></ng-template>
     <ng-template #elseBlock2><button class="btn_enter" (click)="onClickEnter(room.RoomID)">ENTER</button></ng-template>
 
     <p class="spectator-num"><fa name="eye"></fa>{{room.SpectatorNames.length}}</p>

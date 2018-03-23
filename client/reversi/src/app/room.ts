@@ -1,6 +1,8 @@
+import { Player } from './player';
+
 export class Room {
   room_id: string;
-  player_names: string[];
+  players: Player[];
   spactator_names: string[];
 }
 

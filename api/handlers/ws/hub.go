@@ -36,7 +36,7 @@ func RunHab() {
 }
 
 func sendExit(roomID string, playerID string, playerName string) {
-	url := "http://localhost:12345/api/v1/rooms/" + roomID + "/" + playerID + "/" + playerName
+	url := "http://localhost:12345/api/v1/rooms/" + roomID + "/" + playerID
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
 		log.Println(err)

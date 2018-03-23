@@ -3,6 +3,7 @@ package handlers
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"../../db"
 	"../../models"
@@ -31,14 +32,24 @@ func PostRooms(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "player_name is required")
 	}
 
+	var player_id string
+	var err error
+	if player_id, err = readCookie(c, "player_id"); err != nil {
+		player_id = uuid.Must(uuid.NewV4()).String()
+		writeCookie(c, "player_id", player_id)
+	}
+
 	roomID := uuid.Must(uuid.NewV4()).String()
 	room := &models.Room{
 		RoomID: roomID,
-		PlayerNames: []string{
-			player_name,
+		Players: []models.Player{
+			models.Player{
+				ID:   player_id,
+				Name: player_name,
+			},
 		},
 	}
-	err := dbb.Collection(room.String()).Insert(room)
+	err = dbb.Collection(room.String()).Insert(room)
 	if err != nil {
 		return c.NoContent(http.StatusOK)
 	}
@@ -70,12 +81,20 @@ func PutRooms(c echo.Context) error {
 		return c.NoContent(http.StatusOK)
 	}
 
-	if len(room.PlayerNames) > 1 {
+	if len(room.Players) > 1 {
 		return c.String(http.StatusBadRequest, "This room is full")
 	}
-	room.PlayerNames = append(room.PlayerNames, player_name)
 
-	upsert := bson.M{"$set": bson.M{"player_names": room.PlayerNames}}
+	var player_id string
+	if player_id, err = readCookie(c, "player_id"); err != nil {
+		player_id = uuid.Must(uuid.NewV4()).String()
+		writeCookie(c, "player_id", player_id)
+	}
+
+	player := models.Player{player_id, player_name}
+	room.Players = append(room.Players, player)
+
+	upsert := bson.M{"$set": bson.M{"players": room.Players}}
 	_, err = dbb.Collection(room.String()).Upsert(query, upsert)
 	if err != nil {
 		return c.NoContent(http.StatusOK)
@@ -94,10 +113,10 @@ func ExitRoom(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "room_id is required")
 	}
 
-	player_name := c.Param("player_name")
-	if player_name == "" {
-		log.Println("player_name is required")
-		return c.String(http.StatusBadRequest, "player_name is required")
+	player_id := c.Param("player_id")
+	if player_id == "" {
+		log.Println("player_id is required")
+		return c.String(http.StatusBadRequest, "player_id is required")
 	}
 
 	query := bson.M{"room_id": roomID}
@@ -109,14 +128,19 @@ func ExitRoom(c echo.Context) error {
 		return c.NoContent(http.StatusOK)
 	}
 
-	if len(room.PlayerNames) == 1 {
+	if len(room.Players) == 1 {
 		deleteRoom(roomID)
 		return c.NoContent(http.StatusOK)
 	}
-	room.PlayerNames = append(room.PlayerNames, player_name)
+
+	for i, player := range room.Players {
+		if player.ID == player_id {
+			room.Players = unset(room.Players, i)
+		}
+	}
 
 	// TODO
-	upsert := bson.M{"$unset": bson.M{"player_names": room.PlayerNames}}
+	upsert := bson.M{"$set": bson.M{"players": room.Players}}
 	_, err = dbb.Collection(room.String()).Upsert(query, upsert)
 	if err != nil {
 		return c.NoContent(http.StatusOK)
@@ -136,4 +160,41 @@ func deleteRoom(roomID string) error {
 	}
 
 	return nil
+}
+
+// TODO utilへ
+func remove(strings []string, search string) []string {
+	result := []string{}
+	for _, v := range strings {
+		if v != search {
+			result = append(result, v)
+		}
+	}
+	return result
+}
+
+func unset(s []models.Player, i int) []models.Player {
+	if i >= len(s) {
+		return s
+	}
+	return append(s[:i], s[i+1:]...)
+}
+
+func writeCookie(c echo.Context, key string, value string) {
+	cookie := new(http.Cookie)
+	cookie.Name = key
+	cookie.Value = value
+	// 1day
+	cookie.Expires = time.Now().Add(24 * time.Hour)
+	c.SetCookie(cookie)
+	log.Println("write cookie", key, value)
+}
+
+func readCookie(c echo.Context, key string) (string, error) {
+	cookie, err := c.Cookie(key)
+	if err != nil {
+		return "", err
+	}
+	log.Println("read cookie", key, cookie.Value)
+	return cookie.Value, nil
 }
