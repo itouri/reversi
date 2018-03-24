@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {ReversiService} from '../reversi.service';
 
+import {Reversi} from './reversi';
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -9,24 +11,18 @@ import {ReversiService} from '../reversi.service';
 })
 export class GameComponent implements OnInit {
   // TODO このクラスがやってること多すぎ
-  stone: { [key: number]: string; } = {};
-  field: number[][] = new Array();
-  turn: number;
-  opponent: string;
-
   player_id: string;
   player_name: string;
   room_id: string;
 
-  myColor: number;
+  rs: Reversi;
 
-  blackNum: number;
-  whiteNum: number;
+  opponent: string;
 
   constructor(
     private reversiService: ReversiService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -36,7 +32,7 @@ export class GameComponent implements OnInit {
     this.player_id = this.route.snapshot.paramMap.get('player_id');
     this.player_name = this.route.snapshot.paramMap.get('player_name');
     console.log(this.room_id);
-    this.init();
+    this.rs = new Reversi();
     this.initWebsocket();
   }
 
@@ -46,17 +42,17 @@ export class GameComponent implements OnInit {
 
   rematch() {
     console.log('rematch');
-    this.init();
+    this.rs.init();
   }
 
   stoneColor(myColor: string) {
     console.log('mycolor:' + myColor);
-    this.myColor = Number(myColor);
+    this.rs.myColor = Number(myColor);
   }
 
   getStone(putPos: string) {
     const pos = putPos.split(',').map(Number);
-    this.putStone(pos[0], pos[1], true);
+    this.rs.putStone(pos[0], pos[1], true);
     console.log('getStone: ', pos[0], pos[1]);
     // 呼んだ方もこの関数を実行してしまう
   }
@@ -91,27 +87,8 @@ export class GameComponent implements OnInit {
           break;
       }
     });
-  }
-
-  init() {
-    // TODO もっと美しい初期化方法はないの？
-    for ( let i = 0; i < 8; i++ ) {
-      this.field[i] = new Array();
-      for ( let j = 0; j < 8; j++ ) {
-        this.field[i][j] = 0;
-      }
-    }
-    this.field[3][3] = this.field[4][4] = -1;
-    this.field[3][4] = this.field[4][3] = 1;
-
-    // TODO 美しくない
-    this.stone[-1] = '⚪';
-    this.stone[ 0] = '';
-    this.stone[ 1] = '⚫';
-
-    this.blackNum = this.whiteNum = 2;
-
-    this.turn = 1;
+    // TODO これだとjoinが失敗したとき残る
+    this.send('join', this.player_name);
   }
 
   onClickExit() {
@@ -119,87 +96,15 @@ export class GameComponent implements OnInit {
   }
 
   onClickRematch() {
-    this.init();
+    this.rs.init();
     this.send('rematch', '');
   }
 
   onClickCell(x: number, y: number) {
-    if (this.turn === 0 || this.turn !== this.myColor) { return; }
-    if (this.putStone(x, y, true)) {
+    if (this.rs.turn === 0 || this.rs.turn !== this.rs.myColor) { return; }
+    if (this.rs.putStone(x, y, true)) {
       this.send('getStone', `${x}, ${y}`);
     }
-    this.isFinish();
-  }
-
-  countStone() {
-    // TODO もっといい数え方はないのか?
-    let b = 0, w = 0;
-    this.field.forEach(row => {
-      row.forEach(cell => {
-        if (cell ===  1) { b++; }
-        if (cell === -1) { w++; }
-      });
-    });
-    this.blackNum = b;
-    this.whiteNum = w;
-  }
-
-  isFinish() {
-    if ( this.isPass() && this.isPass() ) {
-      this.turn = 0;
-      return true;
-    }
-    return false;
-  }
-
-  isPass() {
-    for ( let i = 0; i < 8; i++ ) {
-      for ( let j = 0; j < 8; j++ ) {
-        if ( this.putStone(i, j, false) ) {
-          return false;
-        }
-      }
-    }
-    this.turn *= -1;
-    return true;
-  }
-
-  putStone(x: number, y: number, turn: boolean) {
-    // 置いてあるとこには置けない
-    if ( this.field[y][x] !== 0 ) { return false; }
-    let turnCell = new Array();
-    for (let i = -1; i < 2; i++) {
-      for (let j = -1; j < 2; j++) {
-        let tx = x + j;
-        let ty = y + i;
-        let stockCell = new Array();
-        while (true) {
-          if ( ty < 0 || 7 < ty || tx < 0 || 7 < tx ) { break; }
-          if ( this.field[ty][tx] === this.turn * -1 ) {
-            stockCell.push([ty, tx]);
-            tx += j;
-            ty += i;
-          } else if ( this.field[ty][tx] === this.turn ) {
-            stockCell.forEach(cell => {
-              turnCell.push(cell);
-            });
-            break;
-          } else { // 0
-            break;
-          }
-        }
-      }
-    }
-     if (turn && turnCell.length !== 0) {
-       // TODO putStoneへ退避
-      this.field[y][x] = this.turn;
-      this.turn *= -1;
-      turnCell.forEach(cell => {
-        this.field[cell[0]][cell[1]] *= -1;
-      });
-      this.countStone();
-    }
-
-    return (turnCell.length === 0) ? false : true;
+    this.rs.isFinish();
   }
 }

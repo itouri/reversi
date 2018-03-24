@@ -1,16 +1,17 @@
 <h1>Game</h1>
 <table class="field">
-  <tr *ngFor="let row of field; index as i">
-    <td *ngFor="let cell of row; index as j" (click)="onClickCell(j, i)">{{stone[cell]}}</td>
+  <tr *ngFor="let row of rs.field; index as i">
+    <td *ngFor="let cell of row; index as j" (click)="onClickCell(j, i)">{{rs.stone[cell]}}</td>
   </tr>
 </table>
-<span>{{stone[1]}}: {{blackNum}}    {{stone[-1]}}: {{whiteNum}}</span>
+<p>Me: {{player_name}}    Opp: {{opponent}}</p>
+<span>{{rs.stone[1]}}: {{rs.blackNum}}    {{rs.stone[-1]}}: {{rs.whiteNum}}</span>
 
-<p>MyColor: {{stone[myColor]}}</p>
+<p>MyColor: {{rs.stone[rs.myColor]}}</p>
 
-<div *ngIf="turn === 0; then thenBlock else elseBlock"></div>
+<div *ngIf="rs.turn === 0; then thenBlock else elseBlock"></div>
   <ng-template #thenBlock><button (click)="onClickRematch()">REMATCH</button></ng-template>
-  <ng-template #elseBlock><p>turn: {{stone[turn]}}</p></ng-template>
+  <ng-template #elseBlock><p>turn: {{rs.stone[rs.turn]}}</p></ng-template>
 
 <button (click)="onClickRematch()">REMATCH</button>
 <button (click)="onClickExit()">EXIT</button>
