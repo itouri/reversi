@@ -3,7 +3,7 @@ import { Player } from './player';
 export class Room {
   room_id: string;
   players: Player[];
-  spactator_names: string[];
+  spactators: string[];
 }
 
 // type Room struct {

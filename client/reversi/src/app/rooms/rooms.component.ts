@@ -36,7 +36,7 @@ export class RoomsComponent implements OnInit {
       if (this.player_id === undefined) {
         this.player_id = resJSON['PlayerID'];
       }
-      this.router.navigateByUrl(`/game?room_id=${resJSON['RoomID']}&player_id=${this.player_id}&player_name=${this.player_name}`);
+      this.router.navigateByUrl(`/game/${resJSON['RoomID']}/${this.player_id}/${this.player_name}`);
     });
   }
 
@@ -47,7 +47,7 @@ export class RoomsComponent implements OnInit {
       if (this.player_id === undefined) {
         this.player_id = player_id;
       }
-      this.router.navigateByUrl(`/game?room_id=${room_id}&player_id=${this.player_id}&player_name=${this.player_name}`);
+      this.router.navigateByUrl(`/game/${room_id}/${this.player_id}/${this.player_name}`);
     }); // TODO もっといいリダイレクトの方法
   }
 }
