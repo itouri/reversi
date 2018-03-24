@@ -74,6 +74,10 @@ func (h *hub) run() {
 		case m := <-h.broadcast:
 			connections := h.rooms[m.room]
 			for c := range connections {
+				// メッセージの送信元には送らない
+				if m.conn == c {
+					continue
+				}
 				select {
 				case c.send <- m.data:
 				default:

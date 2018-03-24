@@ -64,7 +64,7 @@ func (s subscription) readPump() {
 		// TODO ここに具体的な処理を書かない
 		s.rematch(msg)
 
-		m := message{s.room, msg}
+		m := message{s.room, msg, c}
 		h.broadcast <- m
 	}
 }

@@ -31,12 +31,13 @@ type jsonReversi struct {
 type message struct {
 	room string
 	data []byte
+	conn *connection // 送らない相手(自分のこと)
 }
 
 type uniMessage struct {
 	room string
 	data []byte
-	conn *connection
+	conn *connection // 送る相手
 }
 
 // TODO この関数を gollira.muxを使ってなくす
