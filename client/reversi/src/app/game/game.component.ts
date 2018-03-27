@@ -58,6 +58,9 @@ export class GameComponent implements OnInit {
   }
 
   join(name: string) {
+    if (this.opponent === undefined) {
+      this.send('join', this.player_name);
+    }
     this.opponent = name;
   }
 
@@ -66,7 +69,10 @@ export class GameComponent implements OnInit {
   }
 
   initWebsocket() {
-    this.reversiService.connect(this.room_id, this.player_id, this.player_name).subscribe(msg => {
+    // TODO connectの完了をハンドルするように書き換える
+    setTimeout(() => this.send('join', this.player_name), 200 );
+    this.reversiService.connect(this.room_id, this.player_id, this.player_name)
+    .subscribe(msg => {
       // TODO もっといい方法ないのか?
       console.log(msg);
       switch (msg.funcName) {
@@ -87,8 +93,6 @@ export class GameComponent implements OnInit {
           break;
       }
     });
-    // TODO これだとjoinが失敗したとき残る
-    this.send('join', this.player_name);
   }
 
   onClickExit() {

@@ -20,6 +20,7 @@ export class ReversiService {
     return this.messages = <Subject<ReversiMessage>>this.webSocketService
       .connect(this.roomUrl(room_id, player_id, player_name))
       .map((response: MessageEvent): ReversiMessage => {
+        // TODO serviceに書かない
         const data = JSON.parse(response.data) as ReversiMessage;
         return data;
       });
