@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { catchError } from 'rxjs/operators';
 
-import { Room } from './room';
+import { Room, ReqRoom } from './room';
 import { StaticInjector } from '@angular/core/src/di/injector';
 
 const httpOptions = {
@@ -25,23 +25,25 @@ export class RoomService {
   }
 
   createRoom(player_id: string, player_name: string): Observable<string> {
-    let url = this.roomUrl + '?player_name=' + player_name;
+    let body = new(ReqRoom);
+    body.player_name = player_name;
     if (player_id !== undefined) {
-      url += `&player_id=${player_id}`;
+      body.player_id = player_id;
     }
-    return this.http.post<string>(url, '').pipe(
+    return this.http.post<string>(this.roomUrl, body).pipe(
       catchError(this.handleError<string>('createRoom'))
     );
   }
 
   enterRoom(room_id: string, player_id: string, player_name: string): Observable<any> {
     // TODO もっとイケてる方法がある
-    let url = this.roomUrl + '?room_id=' + room_id + '&player_name=' + player_name;
+    let body = new(ReqRoom);
+    body.room_id = room_id;
+    body.player_name = player_name;
     if (player_id !== undefined) {
-      url += `&player_id=${player_id}`;
+      body.player_id = player_id;
     }
-    console.log(url);
-    return this.http.put(url, room_id).pipe(
+    return this.http.put(this.roomUrl, room_id).pipe(
       catchError(this.handleError<any>('enterRoom'))
     );
   }
