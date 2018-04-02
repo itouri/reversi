@@ -1,10 +1,5 @@
 package ws
 
-import (
-	"log"
-	"net/http"
-)
-
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
 type hub struct {
@@ -33,19 +28,6 @@ var h = hub{
 
 func RunHab() {
 	go h.run()
-}
-
-func sendExit(roomID string, playerID string) {
-	url := "http://localhost:12345/api/v1/rooms/" + roomID + "/" + playerID
-	req, err := http.NewRequest("DELETE", url, nil)
-	if err != nil {
-		log.Println(err)
-	}
-	client := new(http.Client)
-	_, err = client.Do(req)
-	if err != nil {
-		log.Println(err)
-	}
 }
 
 func (h *hub) run() {

@@ -1,7 +1,6 @@
 package ws
 
 import (
-	"encoding/json"
 	"log"
 	"time"
 
@@ -14,33 +13,6 @@ type subscription struct {
 	conn   *connection
 	room   string
 	player *models.Player // TODO ここにplayerがあるべきなのか?
-}
-
-// TODO ここに具体的な処理を書かない
-func (s *subscription) rematch(msg []byte) {
-	var data jsonReversi
-	if err := json.Unmarshal(msg, &data); err != nil {
-		log.Print(err)
-	}
-	// 中身が rematch なら stoneColor を各クライアントに送信
-	if data.FuncName == "rematch" {
-		i := 0
-		colors := []string{"-1", "1"}
-		connections := h.rooms[s.room]
-		for c := range connections {
-			sendMsg := &jsonReversi{
-				FuncName: "stoneColor",
-				Body:     colors[i],
-			}
-			sendJSON, err := json.Marshal(sendMsg)
-			if err != nil {
-				log.Print(err)
-			}
-			m := uniMessage{s.room, sendJSON, c}
-			h.unicast <- m
-			i++
-		}
-	}
 }
 
 // readPump pumps messages from the websocket connection to the hub.
@@ -62,7 +34,7 @@ func (s subscription) readPump() {
 			break
 		}
 		// TODO ここに具体的な処理を書かない
-		s.rematch(msg)
+		trapReadMsg(s, msg)
 
 		m := message{s.room, msg, c}
 		h.broadcast <- m
