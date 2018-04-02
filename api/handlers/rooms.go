@@ -3,17 +3,23 @@ package handlers
 import (
 	"log"
 	"net/http"
-	"time"
 
 	"../../db"
 	"../../models"
+	"../util"
 	"github.com/labstack/echo"
 	"github.com/satori/go.uuid"
 	"gopkg.in/mgo.v2/bson"
 )
 
+// TODO グローバル変数にしていいのかな
+var dbb *db.DbBase
+
+func init() {
+	dbb = &db.DbBase{}
+}
+
 func GetRooms(c echo.Context) error {
-	dbb := &db.DbBase{}
 	room := &models.Room{}
 	rooms := []models.Room{}
 	err := dbb.Collection(room.String()).Find(nil).All(&rooms)
@@ -24,8 +30,6 @@ func GetRooms(c echo.Context) error {
 }
 
 func PostRooms(c echo.Context) error {
-	dbb := &db.DbBase{}
-
 	player_name := c.QueryParam("player_name")
 	if player_name == "" {
 		log.Println("player_name is required")
@@ -61,7 +65,6 @@ func PostRooms(c echo.Context) error {
 }
 
 func PutRooms(c echo.Context) error {
-	dbb := &db.DbBase{}
 	room := &models.Room{}
 
 	roomID := c.QueryParam("room_id")
@@ -108,7 +111,6 @@ func PutRooms(c echo.Context) error {
 
 func ExitRoom(c echo.Context) error {
 	// TODO いちいちコレ書くの面倒
-	dbb := &db.DbBase{}
 	room := &models.Room{}
 
 	roomID := c.Param("room_id")
@@ -139,7 +141,7 @@ func ExitRoom(c echo.Context) error {
 
 	for i, player := range room.Players {
 		if player.ID == player_id {
-			room.Players = unset(room.Players, i)
+			room.Players = util.Unset(room.Players, i)
 		}
 	}
 
@@ -153,7 +155,6 @@ func ExitRoom(c echo.Context) error {
 }
 
 func deleteRoom(roomID string) error {
-	dbb := &db.DbBase{}
 	room := &models.Room{}
 
 	query := bson.M{"room_id": roomID}
@@ -164,41 +165,4 @@ func deleteRoom(roomID string) error {
 	}
 
 	return nil
-}
-
-// TODO utilへ
-func remove(strings []string, search string) []string {
-	result := []string{}
-	for _, v := range strings {
-		if v != search {
-			result = append(result, v)
-		}
-	}
-	return result
-}
-
-func unset(s []models.Player, i int) []models.Player {
-	if i >= len(s) {
-		return s
-	}
-	return append(s[:i], s[i+1:]...)
-}
-
-func writeCookie(c echo.Context, key string, value string) {
-	cookie := new(http.Cookie)
-	cookie.Name = key
-	cookie.Value = value
-	// 1day
-	cookie.Expires = time.Now().Add(24 * time.Hour)
-	c.SetCookie(cookie)
-	log.Println("writeCookie: ", key, value)
-}
-
-func readCookie(c echo.Context, key string) (string, error) {
-	cookie, err := c.Cookie(key)
-	if err != nil {
-		return "", err
-	}
-	log.Println("readCookie: ", key, cookie.Value)
-	return cookie.Value, nil
 }
