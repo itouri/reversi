@@ -25,7 +25,7 @@ export class RoomService {
   }
 
   createRoom(player_id: string, player_name: string): Observable<string> {
-    let body = new(ReqRoom);
+    const body = new(ReqRoom);
     body.player_name = player_name;
     if (player_id !== undefined) {
       body.player_id = player_id;
@@ -36,14 +36,13 @@ export class RoomService {
   }
 
   enterRoom(room_id: string, player_id: string, player_name: string): Observable<any> {
-    // TODO もっとイケてる方法がある
-    let body = new(ReqRoom);
+    const body = new(ReqRoom);
     body.room_id = room_id;
     body.player_name = player_name;
     if (player_id !== undefined) {
       body.player_id = player_id;
     }
-    return this.http.put(this.roomUrl, room_id).pipe(
+    return this.http.put(this.roomUrl, body).pipe(
       catchError(this.handleError<any>('enterRoom'))
     );
   }
