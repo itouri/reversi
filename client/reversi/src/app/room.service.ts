@@ -27,9 +27,7 @@ export class RoomService {
   createRoom(player_id: string, player_name: string): Observable<string> {
     const body = new(ReqRoom);
     body.player_name = player_name;
-    if (player_id !== undefined) {
-      body.player_id = player_id;
-    }
+    console.log('reqBody', body);
     return this.http.post<string>(this.roomUrl, body).pipe(
       catchError(this.handleError<string>('createRoom'))
     );
@@ -39,9 +37,6 @@ export class RoomService {
     const body = new(ReqRoom);
     body.room_id = room_id;
     body.player_name = player_name;
-    if (player_id !== undefined) {
-      body.player_id = player_id;
-    }
     return this.http.put(this.roomUrl, body).pipe(
       catchError(this.handleError<any>('enterRoom'))
     );

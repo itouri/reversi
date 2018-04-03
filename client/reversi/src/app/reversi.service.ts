@@ -9,7 +9,7 @@ export class ReversiService {
   private messages: Subject<ReversiMessage>;
 
   private roomUrl(room_id: string, player_id: string, player_name: string): string {
-    console.log('roomUrl', player_id);
+    console.log('roomUrl', room_id);
     return `ws://localhost:12345/ws?room_id=${room_id}&player_name=${player_name}&player_id=${player_id}`;
   }
 

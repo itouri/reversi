@@ -9,20 +9,28 @@ import (
 	"../util"
 	"github.com/labstack/echo"
 	"github.com/satori/go.uuid"
+	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
 // TODO グローバル変数にしていいのかな
-var dbb *db.DbBase
+var dbRoom *mgo.Collection
 
 func init() {
-	dbb = &db.DbBase{}
+	room := &models.Room{}
+	dbb := &db.DbBase{}
+	dbRoom = dbb.Collection(room.String())
+}
+
+type Req struct {
+	RoomID     string `json:"room_id"`
+	PlayerID   string `json:"player_id"`
+	PlayerName string `json:"player_name"`
 }
 
 func GetRooms(c echo.Context) error {
-	room := &models.Room{}
 	rooms := []models.Room{}
-	err := dbb.Collection(room.String()).Find(nil).All(&rooms)
+	err := dbRoom.Find(nil).All(&rooms)
 	if err != nil {
 		return c.String(http.StatusOK, err.Error())
 	}
@@ -30,28 +38,29 @@ func GetRooms(c echo.Context) error {
 }
 
 func PostRooms(c echo.Context) error {
-	player_name := c.QueryParam("player_name")
-	if player_name == "" {
+	req := new(Req)
+	if err := c.Bind(req); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	if req.PlayerName == "" {
 		log.Println("player_name is required")
 		return c.String(http.StatusBadRequest, "player_name is required")
 	}
 
-	player_id := c.QueryParam("player_id")
-	if player_id == "" {
-		player_id = uuid.Must(uuid.NewV4()).String()
-	}
-
+	playerID := uuid.Must(uuid.NewV4()).String()
 	roomID := uuid.Must(uuid.NewV4()).String()
+
 	room := &models.Room{
 		RoomID: roomID,
 		Players: []models.Player{
 			models.Player{
-				ID:   player_id,
-				Name: player_name,
+				ID:   playerID,
+				Name: req.PlayerName,
 			},
 		},
 	}
-	err := dbb.Collection(room.String()).Insert(room)
+	err := dbRoom.Insert(room)
 	if err != nil {
 		return c.NoContent(http.StatusOK)
 	}
@@ -61,33 +70,32 @@ func PostRooms(c echo.Context) error {
 		PlayerID string
 	}
 
-	return c.JSON(http.StatusOK, res{roomID, player_id})
+	return c.JSON(http.StatusOK, res{roomID, playerID})
 }
 
 func PutRooms(c echo.Context) error {
-	room := &models.Room{}
+	req := new(Req)
+	if err := c.Bind(req); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
 
-	roomID := c.QueryParam("room_id")
-	if roomID == "" {
+	if req.RoomID == "" {
 		log.Println("room_id is required")
 		return c.String(http.StatusBadRequest, "room_id is required")
 	}
 
-	player_name := c.QueryParam("player_name")
-	if player_name == "" {
+	if req.PlayerName == "" {
 		log.Println("player_name is required")
 		return c.String(http.StatusBadRequest, "player_name is required")
 	}
 
-	player_id := c.QueryParam("player_id")
-	if player_id == "" {
-		player_id = uuid.Must(uuid.NewV4()).String()
-	}
+	player_id := uuid.Must(uuid.NewV4()).String()
 
-	query := bson.M{"room_id": roomID}
+	query := bson.M{"room_id": req.RoomID}
 
+	room := &models.Room{}
 	// TODO upsertのやりかたが間違ってる
-	err := dbb.Collection(room.String()).Find(query).One(room)
+	err := dbRoom.Find(query).One(room)
 	if err != nil {
 		log.Println(err)
 		return c.NoContent(http.StatusOK)
@@ -97,11 +105,11 @@ func PutRooms(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "This room is full")
 	}
 
-	player := models.Player{player_id, player_name}
+	player := models.Player{player_id, req.PlayerName}
 	room.Players = append(room.Players, player)
 
 	upsert := bson.M{"$set": bson.M{"players": room.Players}}
-	_, err = dbb.Collection(room.String()).Upsert(query, upsert)
+	_, err = dbRoom.Upsert(query, upsert)
 	if err != nil {
 		return c.NoContent(http.StatusOK)
 	}
@@ -128,7 +136,7 @@ func ExitRoom(c echo.Context) error {
 	query := bson.M{"room_id": roomID}
 
 	// TODO upsertのやりかたが間違ってる
-	err := dbb.Collection(room.String()).Find(query).One(room)
+	err := dbRoom.Find(query).One(room)
 	if err != nil {
 		log.Println(err)
 		return c.NoContent(http.StatusOK)
@@ -147,7 +155,7 @@ func ExitRoom(c echo.Context) error {
 
 	// TODO
 	upsert := bson.M{"$set": bson.M{"players": room.Players}}
-	_, err = dbb.Collection(room.String()).Upsert(query, upsert)
+	_, err = dbRoom.Upsert(query, upsert)
 	if err != nil {
 		return c.NoContent(http.StatusOK)
 	}
@@ -155,14 +163,6 @@ func ExitRoom(c echo.Context) error {
 }
 
 func deleteRoom(roomID string) error {
-	room := &models.Room{}
-
 	query := bson.M{"room_id": roomID}
-
-	err := dbb.Collection(room.String()).Remove(query)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return dbRoom.Remove(query)
 }

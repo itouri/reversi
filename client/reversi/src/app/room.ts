@@ -8,7 +8,6 @@ export class Room {
 
 export class ReqRoom {
   room_id?: string;
-  player_id?: string;
   player_name?: string;
 }
 
