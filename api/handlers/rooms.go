@@ -66,8 +66,8 @@ func PostRooms(c echo.Context) error {
 	}
 
 	type res struct {
-		RoomID   string
-		PlayerID string
+		RoomID   string `json:"room_id"`
+		PlayerID string `json:"player_id"`
 	}
 
 	return c.JSON(http.StatusOK, res{roomID, playerID})

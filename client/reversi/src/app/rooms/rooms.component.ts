@@ -32,7 +32,7 @@ export class RoomsComponent implements OnInit {
     this.roomService.createRoom(this.player_name)
     .subscribe((resJSON) => {
       console.log('resJSON', resJSON);
-      this.router.navigateByUrl(`/game/${resJSON['RoomID']}/${resJSON['PlayerID']}/${this.player_name}`);
+      this.router.navigateByUrl(`/game/${resJSON['room_id']}/${resJSON['player_id']}/${this.player_name}`);
     });
   }
 
