@@ -24,7 +24,7 @@ export class RoomService {
     );
   }
 
-  createRoom(player_id: string, player_name: string): Observable<string> {
+  createRoom(player_name: string): Observable<string> {
     const body = new(ReqRoom);
     body.player_name = player_name;
     console.log('reqBody', body);
@@ -33,7 +33,7 @@ export class RoomService {
     );
   }
 
-  enterRoom(room_id: string, player_id: string, player_name: string): Observable<any> {
+  enterRoom(room_id: string, player_name: string): Observable<any> {
     const body = new(ReqRoom);
     body.room_id = room_id;
     body.player_name = player_name;
