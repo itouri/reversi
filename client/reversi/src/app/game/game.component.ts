@@ -97,6 +97,7 @@ export class GameComponent implements OnInit {
 
   onClickExit() {
     this.router.navigateByUrl(`/rooms`);
+    // TODO ここで websocket の接続を切る
   }
 
   onClickRematch() {

@@ -10,6 +10,7 @@ export class Reversi {
 
   constructor() {
     this.init();
+    this.turn = 0;
   }
 
   init() {

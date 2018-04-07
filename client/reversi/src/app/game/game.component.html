@@ -5,13 +5,13 @@
   </tr>
 </table>
 <p>Me: {{player_name}}    Opp: {{opponent}}</p>
-<span>{{rs.stone[1]}}: {{rs.blackNum}}    {{rs.stone[-1]}}: {{rs.whiteNum}}</span>
+<div *ngIf="opponent">
+  <span>{{rs.stone[1]}}: {{rs.blackNum}}    {{rs.stone[-1]}}: {{rs.whiteNum}}</span>
 
-<p>MyColor: {{rs.stone[rs.myColor]}}</p>
+  <p>MyColor: {{rs.stone[rs.myColor]}}</p>
+  <div *ngIf="rs.turn === 0; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock><button (click)="onClickRematch()">REMATCH</button></ng-template>
+    <ng-template #elseBlock><p>turn: {{rs.stone[rs.turn]}}</p></ng-template>
+</div>
 
-<div *ngIf="rs.turn === 0; then thenBlock else elseBlock"></div>
-  <ng-template #thenBlock><button (click)="onClickRematch()">REMATCH</button></ng-template>
-  <ng-template #elseBlock><p>turn: {{rs.stone[rs.turn]}}</p></ng-template>
-
-<button (click)="onClickRematch()">REMATCH</button>
 <button (click)="onClickExit()">EXIT</button>
