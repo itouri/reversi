@@ -19,6 +19,8 @@ type subscription struct {
 func (s subscription) readPump() {
 	c := s.conn
 	defer func() {
+		// TODO 接続解除の処理はここにあるべきなのか?
+		sendExit(s.room, s.player.ID, s.conn)
 		h.unregister <- s
 		c.ws.Close()
 	}()

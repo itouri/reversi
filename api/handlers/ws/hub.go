@@ -43,8 +43,7 @@ func (h *hub) run() {
 		case s := <-h.unregister:
 			connections := h.rooms[s.room]
 			if connections != nil {
-				// TODO 接続解除の処理はここにあるべきなのか?
-				sendExit(s.room, s.player.ID)
+				//TODO sendExitの呼び出しは ココ にあったけどそれだと上手く動かない！ 原因解明
 				if _, ok := connections[s.conn]; ok {
 					delete(connections, s.conn)
 					close(s.conn.send)
