@@ -65,12 +65,12 @@ export class GameComponent implements OnInit {
   }
 
   exit() {
-    this.opponent = '';
+    this.opponent = undefined;
   }
 
   initWebsocket() {
     // TODO connectの完了をハンドルするように書き換える
-    setTimeout(() => this.send('join', this.player_name), 200 );
+    setTimeout(() => this.send('join', this.player_name), 50 );
     this.reversiService.connect(this.room_id, this.player_id, this.player_name)
     .subscribe(msg => {
       // TODO もっといい方法ないのか?

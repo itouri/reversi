@@ -17,18 +17,14 @@ export class ReversiService {
   }
 
   connect(room_id: string, player_id: string, player_name: string): Subject<ReversiMessage> {
-    return this.messages = <Subject<ReversiMessage>>this.webSocketService
-      .connect(this.roomUrl(room_id, player_id, player_name))
-      .map((response: MessageEvent): ReversiMessage => {
-        // TODO serviceに書かない
-        const data = JSON.parse(response.data) as ReversiMessage;
-        return data;
-      });
+  return this.messages = <Subject<ReversiMessage>>this.webSocketService
+    .connect(this.roomUrl(room_id, player_id, player_name))
+    .map((response: MessageEvent): ReversiMessage => {
+      // TODO serviceに書かない
+      const data = JSON.parse(response.data) as ReversiMessage;
+      return data;
+    });
   }
-
-  // send(name: string, message: string): void {
-  //   this.messages.next(this.createMessage(name, message));
-  // }
 
   send(funcName: string, body: string): void {
     this.messages.next(this.createMessage(funcName, body));
