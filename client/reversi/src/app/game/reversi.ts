@@ -1,3 +1,10 @@
+// TODO 適当にここに書いちゃった
+enum Stone {
+  WHITE = -1,
+  NONE = 0,
+  BLACK = 1,
+}
+
 export class Reversi {
   stone: { [key: number]: string; } = {};
   field: number[][] = new Array();
@@ -10,7 +17,7 @@ export class Reversi {
 
   constructor() {
     this.init();
-    this.turn = 0;
+    this.turn = Stone.NONE;
   }
 
   init() {
@@ -21,17 +28,17 @@ export class Reversi {
         this.field[i][j] = 0;
       }
     }
-    this.field[3][3] = this.field[4][4] = -1;
-    this.field[3][4] = this.field[4][3] = 1;
+    this.field[3][3] = this.field[4][4] = Stone.WHITE;
+    this.field[3][4] = this.field[4][3] = Stone.BLACK;
 
     // TODO 美しくない
-    this.stone[-1] = '⚪';
-    this.stone[ 0] = '';
-    this.stone[ 1] = '⚫';
+    this.stone[Stone.WHITE] = '⚪';
+    this.stone[Stone.NONE ] = '';
+    this.stone[Stone.BLACK] = '⚫';
 
     this.blackNum = this.whiteNum = 2;
 
-    this.turn = 1;
+    this.turn = Stone.BLACK;
   }
 
   countStone() {
@@ -39,8 +46,8 @@ export class Reversi {
     let b = 0, w = 0;
     this.field.forEach(row => {
       row.forEach(cell => {
-        if (cell ===  1) { b++; }
-        if (cell === -1) { w++; }
+        if (cell === Stone.BLACK) { b++; }
+        if (cell === Stone.WHITE) { w++; }
       });
     });
     this.blackNum = b;
