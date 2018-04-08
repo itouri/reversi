@@ -35,7 +35,6 @@ func trapReadMsg(s subscription, msg []byte) {
 	}
 }
 
-// hub.goが呼ぶ
 // func sendExit(roomID string, playerID string, connections map[*connection]bool) {
 func sendExit(roomID string, playerID string, conn *connection) {
 	url := "http://localhost:12345/api/v1/rooms/" + roomID + "/" + playerID
@@ -49,7 +48,6 @@ func sendExit(roomID string, playerID string, conn *connection) {
 		log.Println(err)
 	}
 
-	// このコードがあると1回でもsendExitを呼ぶと次からwebsocketが接続できなくなる
 	// クライアントに exit を送信
 	sendMsg := &jsonReversi{
 		FuncName: "exit",
@@ -59,6 +57,5 @@ func sendExit(roomID string, playerID string, conn *connection) {
 	if err != nil {
 		log.Print(err)
 	}
-	log.Printf("%#v", sendJSON)
 	h.broadcast <- message{roomID, sendJSON, conn}
 }
