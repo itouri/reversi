@@ -2,7 +2,6 @@ package main
 
 import (
 	"./handlers"
-	"./handlers/ws"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -24,10 +23,5 @@ func main() {
 
 	e.DELETE("/api/v1/rooms/:room_id/:player_id", handlers.ExitRoom)
 
-	ws.RunHab()
-	e.GET("/ws", handlers.GetWs)
-
-	// Start server
-	//e.Run(standard.New(":1323"))
 	e.Start(":12345")
 }

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"../../../models"
+	"../../models"
 )
 
 const (

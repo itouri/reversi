@@ -10,7 +10,7 @@ export class ReversiService {
 
   private roomUrl(room_id: string, player_id: string, player_name: string): string {
     console.log('roomUrl', room_id);
-    return `ws://localhost:12345/ws?room_id=${room_id}&player_name=${player_name}&player_id=${player_id}`;
+    return `ws://localhost:23456/ws?room_id=${room_id}&player_name=${player_name}&player_id=${player_id}`;
   }
 
   constructor(private webSocketService: WebSocketService) {
