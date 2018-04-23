@@ -19,12 +19,12 @@ func NewMongoHandler() database.MongoHandler {
 	if err != nil {
 		panic(fmt.Sprintf("Initialize mongodb error:%v", err))
 	}
-	database = session.DB(config.DBCONFIG.Database)
+	database := session.DB(config.DBCONFIG.Database)
 	if err = session.Ping(); err != nil {
 		panic(fmt.Sprintf("MongoDB execute ping error:%v", err))
 	}
 	log.Println("MongoDB initialize success.")
-	mgo.SetDebug(APPCONFIG.Debug)
+	mgo.SetDebug(config.APPCONFIG.Debug)
 }
 
 func (mh *MongoHandler) FindOne(collection string, res interface{}) error {

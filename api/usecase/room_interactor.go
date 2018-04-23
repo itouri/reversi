@@ -34,7 +34,7 @@ func (ri *RoomInteractor) AddPlayerToRoom(roomID string, player domain.Player) e
 	return ri.RoomRepository.UpsertRoomWithPlayers(roomID, room.Players)
 }
 
-func (ri *RoomInteractor) DeletePlayerFromRoom(roomID string, player domain.Player) error {
+func (ri *RoomInteractor) DeletePlayerFromRoom(roomID string, playerID string) error {
 	room, err := ri.RoomRepository.FindByRoomID(roomID)
 	if err != nil {
 		return err
@@ -44,7 +44,7 @@ func (ri *RoomInteractor) DeletePlayerFromRoom(roomID string, player domain.Play
 	}
 
 	for i, roomPlayer := range room.Players {
-		if roomPlayer.ID == player.ID {
+		if roomPlayer.ID == playerID {
 			room.Players = util.Unset(room.Players, i)
 		}
 	}

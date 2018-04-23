@@ -102,10 +102,10 @@ func (rc *RoomController) ExitRoom(c Context) error {
 		return c.String(http.StatusBadRequest, "room_id is required")
 	}
 
-	player_id := c.Param("player_id")
-	if player_id == "" {
+	playerID := c.Param("player_id")
+	if playerID == "" {
 		log.Println("player_id is required")
 		return c.String(http.StatusBadRequest, "player_id is required")
 	}
-	return rc.Interactor.DeletePlayerFromRoom(roomID, player)
+	return rc.Interactor.DeletePlayerFromRoom(roomID, playerID)
 }

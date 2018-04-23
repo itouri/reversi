@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"../interfaces/controller"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -14,12 +15,14 @@ func Start() {
 
 	e.Use(middleware.CORS())
 
-	// パスの最後に / をつけるといけない
-	e.GET("/api/v1/rooms", handlers.GetRooms)
-	e.POST("/api/v1/rooms", handlers.PostRooms)
-	e.PUT("/api/v1/rooms", handlers.PutRooms)
+	roomController := controller.NewRoomController(NewMongoHandler())
 
-	e.DELETE("/api/v1/rooms/:room_id/:player_id", handlers.ExitRoom)
+	// パスの最後に / をつけるといけない
+	e.GET("/api/v1/rooms", roomController.GetRooms)
+	e.POST("/api/v1/rooms", roomController.PostRooms)
+	e.PUT("/api/v1/rooms", roomController.PutRooms)
+
+	e.DELETE("/api/v1/rooms/:room_id/:player_id", roomController.ExitRoom)
 
 	e.Start(":12345")
 }
