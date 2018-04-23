@@ -27,30 +27,23 @@ func NewMongoHandler() database.MongoHandler {
 	mgo.SetDebug(APPCONFIG.Debug)
 }
 
-func (mh *MongoHandler) FindOne(collection string, res *interface{}) (interface{}, error) {
-	err := mh.Db.C(collection).Find(nil).One(res)
-	if err != nil {
-		return nil, err
-	}
-	return *res, nil
+func (mh *MongoHandler) FindOne(collection string, res interface{}) error {
+	return mh.Db.C(collection).Find(nil).One(res)
 }
 
-func (mh *MongoHandler) FindAll(collection string, res *interface{}) (interface{}, error) {
-	err := mh.Db.C(collection).Find(nil).All(res)
-	if err != nil {
-		return nil, err
-	}
-	return *res, nil
+func (mh *MongoHandler) FindAll(collection string, res interface{}) error {
+	return mh.Db.C(collection).Find(nil).All(res)
 }
 
 func (mh *MongoHandler) Upsert(collection string, query interface{}, upsert interface{}) error {
 	_, err := mh.Db.C(collection).Upsert(query, upsert)
+	return err
 }
 
 func (mh *MongoHandler) Insert(collection string, object interface{}) error {
-	err := mh.Db.C(collection).Insert(object)
+	return mh.Db.C(collection).Insert(object)
 }
 
 func (mh *MongoHandler) Delete(collection string, query interface{}) error {
-	err := mh.Db.C(collection).Remove(query)
+	return mh.Db.C(collection).Remove(query)
 }

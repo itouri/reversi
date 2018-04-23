@@ -11,20 +11,21 @@ type RoomRepository struct {
 }
 
 func (r *RoomRepository) FindAll() (*domain.Rooms, error) {
-	return r.MongoHandler.FindAll(r.Collection)
+	res := new(domain.Rooms)
+	err := r.MongoHandler.FindAll(r.Collection, res)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 func (r *RoomRepository) FindByRoomID(roomID string) (*domain.Room, error) {
 	query := bson.M{"room_id": roomID}
 	room := new(domain.Room)
-	err := r.MongoHandler.FindOne(query, room)
+	err := r.MongoHandler.FindOne(r.Collection, query, room)
 	if err != nil {
 		return nil, err
 	}
-	// room, ok := res.(*domain.Room)
-	// if !ok {
-	// 	return nil, fmt.Errorf("room is not type of room")
-	// }
 	return room, nil
 }
 
