@@ -1,4 +1,4 @@
-package models
+package domain
 
 type Game struct {
 	Field [64]int `validate:"required"`

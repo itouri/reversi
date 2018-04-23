@@ -1,4 +1,4 @@
-package models
+package domain
 
 import "gopkg.in/go-playground/validator.v9"
 

@@ -1,8 +1,6 @@
 package util
 
-import (
-	"../../models"
-)
+import "../domain"
 
 func Remove(strings []string, search string) []string {
 	result := []string{}
@@ -14,7 +12,7 @@ func Remove(strings []string, search string) []string {
 	return result
 }
 
-func Unset(s []models.Player, i int) []models.Player {
+func Unset(s []domain.Player, i int) []domain.Player {
 	if i >= len(s) {
 		return s
 	}

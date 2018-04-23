@@ -1,13 +1,11 @@
-package main
+package infrastructure
 
 import (
-	"./handlers"
-
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
-func main() {
+func Start() {
 	e := echo.New()
 
 	// Middleware

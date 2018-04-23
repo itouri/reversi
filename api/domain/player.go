@@ -1,4 +1,4 @@
-package models
+package domain
 
 type Player struct {
 	ID   string `validate:"required"`

@@ -1,4 +1,6 @@
-package models
+package domain
+
+type Rooms []Rooms
 
 type Room struct {
 	RoomID         string   `bson:"room_id" validate:"required"`
