@@ -11,12 +11,12 @@ type RoomInteractor struct {
 	RoomRepository RoomRepository
 }
 
-func (ri *RoomInteractor) FindAll() (domain.Rooms, error) {
+func (ri *RoomInteractor) FindAll() (*domain.Rooms, error) {
 	return ri.RoomRepository.FindAll()
 }
 
 // 最初に見つかったものだけ返す
-func (ri *RoomInteractor) FindByRoomID(roomID string) (domain.Room, error) {
+func (ri *RoomInteractor) FindByRoomID(roomID string) (*domain.Room, error) {
 	return ri.RoomRepository.FindByRoomID(roomID)
 }
 

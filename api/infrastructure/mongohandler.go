@@ -25,10 +25,16 @@ func NewMongoHandler() database.MongoHandler {
 	}
 	log.Println("MongoDB initialize success.")
 	mgo.SetDebug(config.APPCONFIG.Debug)
+	mongoHandler := &MongoHandler{
+		Db:      database,
+		Session: session,
+	}
+	return mongoHandler
+
 }
 
-func (mh *MongoHandler) FindOne(collection string, res interface{}) error {
-	return mh.Db.C(collection).Find(nil).One(res)
+func (mh *MongoHandler) FindOne(collection string, query interface{}, res interface{}) error {
+	return mh.Db.C(collection).Find(query).One(res)
 }
 
 func (mh *MongoHandler) FindAll(collection string, res interface{}) error {
