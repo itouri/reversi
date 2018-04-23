@@ -25,13 +25,13 @@ func (ri *RoomInteractor) AddPlayerToRoom(roomID string, player domain.Player) e
 	if err != nil {
 		return err
 	}
-	if len(room.Players > 1) {
+	if len(room.Players) > 1 {
 		return fmt.Errorf("This room is full")
 	}
 	room.Players = append(room.Players, player)
 	// upsert って MySQL と MongoDB で共通化できなくないか
 	// TODO mongo非依存
-	return RoomRepository.UpsertRoomWithPlayer(roomID, player)
+	return ri.RoomRepository.UpsertRoomWithPlayers(roomID, room.Players)
 }
 
 func (ri *RoomInteractor) DeletePlayerFromRoom(roomID string, player domain.Player) (err error) {
@@ -39,7 +39,7 @@ func (ri *RoomInteractor) DeletePlayerFromRoom(roomID string, player domain.Play
 	if err != nil {
 		return err
 	}
-	if len(room.Players == 1) {
+	if len(room.Players) == 1 {
 		return ri.DeleteRoom(roomID)
 	}
 
@@ -48,11 +48,11 @@ func (ri *RoomInteractor) DeletePlayerFromRoom(roomID string, player domain.Play
 			room.Players = util.Unset(room.Players, i)
 		}
 	}
-	return RoomRepository.UpsertRoomWithPlayer(roomID, players)
+	return ri.RoomRepository.UpsertRoomWithPlayers(roomID, room.Players)
 }
 
-func (ri *RoomInteractor) CreateRoom(roomID string) error {
-	return ri.RoomRepository.InsertRoom(roomID)
+func (ri *RoomInteractor) CreateRoom(room domain.Room) error {
+	return ri.RoomRepository.InsertRoom(room)
 }
 
 func (ri *RoomInteractor) DeleteRoom(roomID string) error {
