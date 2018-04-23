@@ -52,16 +52,16 @@ func (rc *RoomController) PostRooms(c Context) error {
 	playerID := uuid.Must(uuid.NewV4()).String()
 	roomID := uuid.Must(uuid.NewV4()).String()
 
-	room := &models.Room{
+	room := &domain.Room{
 		RoomID: roomID,
-		Players: []models.Player{
-			models.Player{
+		Players: []domain.Player{
+			domain.Player{
 				ID:   playerID,
 				Name: req.PlayerName,
 			},
 		},
 	}
-	err := rc.Interactor.CreateRoom(room)
+	err := rc.Interactor.CreateRoom(*room)
 	if err != nil {
 		return c.NoContent(http.StatusOK)
 	}
@@ -92,9 +92,20 @@ func (rc *RoomController) PutRooms(c Context) error {
 
 	playerID := uuid.Must(uuid.NewV4()).String()
 	player := domain.Player{playerID, req.PlayerName}
-	rc.Interactor.AddPlayerToRoom(req.RoomID, player)
+	return rc.Interactor.AddPlayerToRoom(req.RoomID, player)
 }
 
 func (rc *RoomController) ExitRoom(c Context) error {
+	roomID := c.Param("room_id")
+	if roomID == "" {
+		log.Println("room_id is required")
+		return c.String(http.StatusBadRequest, "room_id is required")
+	}
 
+	player_id := c.Param("player_id")
+	if player_id == "" {
+		log.Println("player_id is required")
+		return c.String(http.StatusBadRequest, "player_id is required")
+	}
+	return rc.Interactor.DeletePlayerFromRoom(roomID, player)
 }

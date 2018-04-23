@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 
+	"../interfaces/database"
+	"./config"
 	mgo "gopkg.in/mgo.v2"
 )
 
@@ -25,6 +27,11 @@ func NewMongoHandler() database.MongoHandler {
 	mgo.SetDebug(APPCONFIG.Debug)
 }
 
-func Find(result interface{}) error {
-
+func (mh *MongoHandler) FindAll(collection string) (domain.Rooms, error) {
+	rooms := new(domain.Rooms)
+	err := mh.Db.C(collection).Find(nil).All(rooms)
+	if err != nil {
+		return nil, err
+	}
+	return rooms, nil
 }
