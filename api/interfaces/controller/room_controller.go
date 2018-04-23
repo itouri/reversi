@@ -25,6 +25,7 @@ func NewRoomController(mongoHandler database.MongoHandler) *RoomController {
 		Interactor: usecase.RoomInteractor{
 			RoomRepository: &database.RoomRepository{
 				MongoHandler: mongoHandler,
+				Collection:   "room",
 			},
 		},
 	}
@@ -33,7 +34,7 @@ func NewRoomController(mongoHandler database.MongoHandler) *RoomController {
 func (rc *RoomController) GetRooms(c Context) error {
 	rooms, err := rc.Interactor.FindAll()
 	if err != nil {
-		return c.String(http.StatusOK, err.Error())
+		return c.String(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusOK, rooms)
 }
