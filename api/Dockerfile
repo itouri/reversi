@@ -14,6 +14,7 @@ ADD . ${GOPATH}/src/github.com/itouri/reversi/api/
 
 WORKDIR ${GOPATH}/src/github.com/itouri/reversi/api
 
+#TODO --no-cacheをつけないとapk addできない
 RUN apk add --no-cache git
 
 RUN go get -u github.com/Masterminds/glide/...
@@ -26,4 +27,4 @@ RUN glide update
 RUN go install
 
 # CMD go run server.go
-CMD ["/bin/sh"]
+CMD go run server.go
