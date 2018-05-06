@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"../interfaces/database"
-	"./config"
+	"github.com/itouri/reversi/api/infrastructure/config"
+	"github.com/itouri/reversi/api/interfaces/database"
 	mgo "gopkg.in/mgo.v2"
 )
 

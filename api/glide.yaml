@@ -1,0 +1,13 @@
+package: .
+import:
+- package: github.com/labstack/echo
+  version: 3.3.5
+  subpackages:
+  - middleware
+- package: github.com/satori/go.uuid
+  version: v1.2.0
+- package: gopkg.in/go-playground/validator.v9
+  version: v9.16.0
+- package: gopkg.in/mgo.v2
+  subpackages:
+  - bson

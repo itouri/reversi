@@ -1,7 +1,7 @@
 package database
 
 import (
-	"../../domain"
+	"github.com/itouri/reversi/api/domain"
 	"gopkg.in/mgo.v2/bson"
 )
 

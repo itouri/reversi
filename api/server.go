@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./infrastructure"
+	"github.com/itouri/reversi/api/infrastructure"
 )
 
 func main() {
