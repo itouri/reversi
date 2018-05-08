@@ -32,6 +32,7 @@ export class GameComponent implements OnInit {
     this.player_id = this.route.snapshot.paramMap.get('player_id');
     this.player_name = this.route.snapshot.paramMap.get('player_name');
     console.log(this.room_id);
+    console.log(this.player_id);
     this.rs = new Reversi();
     this.initWebsocket();
   }

@@ -39,7 +39,9 @@ export class RoomsComponent implements OnInit {
   onClickEnter(room_id: string): void {
     if (!this.player_name) { return; }
     this.roomService.enterRoom(room_id, this.player_name)
-    .subscribe((player_id) => {
+    .subscribe((retJSON) => {
+      const player_id = retJSON['player_id'];
+      console.log(player_id);
       this.router.navigateByUrl(`/game/${room_id}/${player_id}/${this.player_name}`);
     }); // TODO もっといいリダイレクトの方法
   }

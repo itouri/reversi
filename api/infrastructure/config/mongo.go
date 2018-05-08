@@ -29,7 +29,7 @@ func init() {
 	}
 
 	DBCONFIG = &Db{
-		Host:     "mongo",
+		Host:     "127.0.0.1",
 		Port:     27017,
 		Database: "test",
 	}

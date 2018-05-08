@@ -23,6 +23,6 @@ func PutRooms(c echo.Context) error {
 	return roomController.PutRooms(c)
 }
 
-// func ExitRoom(c echo.Context) error {
-
-// }
+func ExitRoom(c echo.Context) error {
+	return roomController.ExitRoom(c)
+}

@@ -1,4 +1,3 @@
-<h1>Game</h1>
 <table class="field">
   <tr *ngFor="let row of rs.field; index as i">
     <td *ngFor="let cell of row; index as j" (click)="onClickCell(j, i)">{{rs.stone[cell]}}</td>

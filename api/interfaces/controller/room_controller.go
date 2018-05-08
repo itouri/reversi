@@ -93,7 +93,18 @@ func (rc *RoomController) PutRooms(c Context) error {
 
 	playerID := uuid.Must(uuid.NewV4(), nil).String()
 	player := domain.Player{playerID, req.PlayerName}
-	return rc.Interactor.AddPlayerToRoom(req.RoomID, player)
+	log.Println(playerID)
+
+	err := rc.Interactor.AddPlayerToRoom(req.RoomID, player)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	type res struct {
+		PlayerID string `json:"player_id"`
+	}
+
+	return c.JSON(http.StatusOK, res{playerID})
 }
 
 func (rc *RoomController) ExitRoom(c Context) error {

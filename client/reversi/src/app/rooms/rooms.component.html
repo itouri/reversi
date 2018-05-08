@@ -1,11 +1,11 @@
-<h1>Rooms</h1>
+<h1>部屋一覧</h1>
 <div>
-  <label>Player Name:
-      <input [(ngModel)]="player_name" placeholder="Please input your name!">
+  <label>名前:
+      <input [(ngModel)]="player_name" placeholder="名前を入力してね!">
   </label>
 </div>
 <div class="rooms">
-  <button class="btn_create" (click)="onClickCreate()">CREATE</button>
+  <button class="btn_create" (click)="onClickCreate()">作成</button>
   <div class="room" *ngFor="let room of rooms">
     <span class="player1">{{room.Players[0].Name}}</span>
     <img class="battle-icon" src="assets/image/battle_icon.png">
