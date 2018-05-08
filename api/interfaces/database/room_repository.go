@@ -1,6 +1,8 @@
 package database
 
 import (
+	"fmt"
+
 	"../../domain"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -10,11 +12,11 @@ type RoomRepository struct {
 	Collection string
 }
 
-func (r *RoomRepository) FindAll() (*domain.Rooms, error) {
-	res := new(domain.Rooms)
+func (r *RoomRepository) FindAll() (*[]domain.Room, error) {
+	res := new([]domain.Room)
 	err := r.MongoHandler.FindAll(r.Collection, res)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("room_repository:FindAll() " + err.Error())
 	}
 	return res, nil
 }

@@ -1,6 +1,7 @@
 package domain
 
-type Rooms []Rooms
+// mongoの共通関数がつくれなくなる
+// type Rooms []Rooms
 
 type Room struct {
 	RoomID         string   `bson:"room_id" validate:"required"`

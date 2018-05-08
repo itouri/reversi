@@ -15,13 +15,13 @@ func GetRooms(c echo.Context) error {
 	return roomController.GetRooms(c)
 }
 
-// func PostRooms(c echo.Context) error {
+func PostRooms(c echo.Context) error {
+	return roomController.PostRooms(c)
+}
 
-// }
-
-// func PutRooms(c echo.Context) error {
-
-// }
+func PutRooms(c echo.Context) error {
+	return roomController.PutRooms(c)
+}
 
 // func ExitRoom(c echo.Context) error {
 

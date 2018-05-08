@@ -16,10 +16,10 @@ func Start() {
 
 	// パスの最後に / をつけるといけない
 	e.GET("/api/v1/rooms", GetRooms)
-	// e.POST("/api/v1/rooms", roomController.PostRooms)
-	// e.PUT("/api/v1/rooms", roomController.PutRooms)
+	e.POST("/api/v1/rooms", PostRooms)
+	e.PUT("/api/v1/rooms", PutRooms)
 
-	// e.DELETE("/api/v1/rooms/:room_id/:player_id", roomController.ExitRoom)
+	// e.DELETE("/api/v1/rooms/:room_id/:player_id", ExitRoom)
 
 	e.Start(":12345")
 }

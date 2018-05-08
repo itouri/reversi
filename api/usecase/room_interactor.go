@@ -11,7 +11,7 @@ type RoomInteractor struct {
 	RoomRepository RoomRepository
 }
 
-func (ri *RoomInteractor) FindAll() (*domain.Rooms, error) {
+func (ri *RoomInteractor) FindAll() (*[]domain.Room, error) {
 	return ri.RoomRepository.FindAll()
 }
 
