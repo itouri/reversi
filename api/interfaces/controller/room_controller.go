@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"../../domain"
-	"../../usecase"
-	"../database"
+	"github.com/itouri/reversi/api/domain"
+	"github.com/itouri/reversi/api/interfaces/database"
+	"github.com/itouri/reversi/api/usecase"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -50,8 +50,8 @@ func (rc *RoomController) PostRooms(c Context) error {
 		return c.String(http.StatusBadRequest, "player_name is required")
 	}
 
-	playerID := uuid.Must(uuid.NewV4()).String()
-	roomID := uuid.Must(uuid.NewV4()).String()
+	playerID := uuid.Must(uuid.NewV4(), nil).String()
+	roomID := uuid.Must(uuid.NewV4(), nil).String()
 
 	room := &domain.Room{
 		RoomID: roomID,
@@ -91,7 +91,7 @@ func (rc *RoomController) PutRooms(c Context) error {
 		return c.String(http.StatusBadRequest, "player_name is required")
 	}
 
-	playerID := uuid.Must(uuid.NewV4()).String()
+	playerID := uuid.Must(uuid.NewV4(), nil).String()
 	player := domain.Player{playerID, req.PlayerName}
 	return rc.Interactor.AddPlayerToRoom(req.RoomID, player)
 }

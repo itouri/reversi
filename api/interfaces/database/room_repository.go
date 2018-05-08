@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"../../domain"
+	"github.com/itouri/reversi/api/domain"
 	"gopkg.in/mgo.v2/bson"
 )
 

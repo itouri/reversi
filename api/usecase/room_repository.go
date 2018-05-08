@@ -1,6 +1,6 @@
 package usecase
 
-import "../domain"
+import "github.com/itouri/reversi/api/domain"
 
 type RoomRepository interface {
 	FindAll() (*[]domain.Room, error)

@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	"../interfaces/controller"
+	"github.com/itouri/reversi/api/interfaces/controller"
 	"github.com/labstack/echo"
 )
 

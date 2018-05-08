@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  api:
+    build: ./api/
+    ports:
+    - "12345:12345"
+    links:
+      - mongo
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:latest
+    container_name: mongo 
+    volumes:
+      - 'mongodb-data:/data/db'
+    ports:
+      - '27017:27017'
+    command: mongod --smallfiles
+
+volumes:
+  mongodb-data: {}

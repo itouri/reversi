@@ -3,8 +3,8 @@ package usecase
 import (
 	"fmt"
 
-	"../domain"
-	"../util"
+	"github.com/itouri/reversi/api/domain"
+	"github.com/itouri/reversi/api/util"
 )
 
 type RoomInteractor struct {

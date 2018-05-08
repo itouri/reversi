@@ -1,6 +1,6 @@
 package util
 
-import "../domain"
+import "github.com/itouri/reversi/api/domain"
 
 func Remove(strings []string, search string) []string {
 	result := []string{}
