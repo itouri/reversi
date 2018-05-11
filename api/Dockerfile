@@ -3,13 +3,7 @@ FROM golang:1.8.0-alpine
 # Expose HTTP port and set necessary environment variables
 EXPOSE 12345
 
-#TODO 汚い
 # copy source code into the $GOPATH and switch to that directory
-ADD ./domain ${GOPATH}/src/github.com/itouri/reversi/api/domain
-ADD ./infrastructure ${GOPATH}/src/github.com/itouri/reversi/api/infrastructure
-ADD ./interfaces ${GOPATH}/src/github.com/itouri/reversi/api/interfaces
-ADD ./usecase ${GOPATH}/src/github.com/itouri/reversi/api/usecase
-ADD ./util ${GOPATH}/src/github.com/itouri/reversi/api/util
 ADD . ${GOPATH}/src/github.com/itouri/reversi/api/
 
 WORKDIR ${GOPATH}/src/github.com/itouri/reversi/api

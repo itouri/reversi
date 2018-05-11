@@ -3,12 +3,8 @@ FROM golang:1.8.0-alpine
 # Expose HTTP port and set necessary environment variables
 EXPOSE 23456
 
-#TODO 汚い
 # copy source code into the $GOPATH and switch to that directory
-ADD ./handlers ${GOPATH}/src/github.com/itouri/reversi/websocket/handlers
-ADD ./ws ${GOPATH}/src/github.com/itouri/reversi/websocket/ws
-ADD ./util ${GOPATH}/src/github.com/itouri/reversi/websocket/util
-ADD . ${GOPATH}/src/github.com/itouri/reversi/websocket/
+ADD ./ ${GOPATH}/src/github.com/itouri/reversi/websocket
 
 WORKDIR ${GOPATH}/src/github.com/itouri/reversi/websocket
 
