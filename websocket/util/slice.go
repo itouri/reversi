@@ -1,7 +1,7 @@
 package util
 
 import (
-	"../../models"
+	"github.com/itouri/reversi/websocket/models"
 )
 
 func Remove(strings []string, search string) []string {

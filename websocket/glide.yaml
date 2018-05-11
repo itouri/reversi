@@ -1,0 +1,8 @@
+package: github.com/itouri/reversi/websocket
+import:
+- package: github.com/gorilla/websocket
+  version: v1.2.0
+- package: github.com/labstack/echo
+  version: 3.3.5
+  subpackages:
+  - middleware

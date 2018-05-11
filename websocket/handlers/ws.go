@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"../ws"
+	"github.com/itouri/reversi/websocket/ws"
 
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo"
