@@ -11,4 +11,21 @@ RUN apt-get install -y docker-ce
 # install docker-compose
 RUN curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
 RUN chmod +x /usr/local/bin/docker-compose
+# install golang
+RUN apt-get install -y golang-go
+ENV GOPATH $HOME/go
+ENV PATH $GOPATH/bin:$PATH
+# install git
+RUN apt-get install -y git
+ADD . $GOPATH/src/github.com/itouri/reversi
+# install glide
+RUN go get -u github.com/Masterminds/glide/...
+WORKDIR $GOPATH/src/github.com/itouri/reversi/api
+RUN glide update
+RUN go build -o api
+# compile each services
+#RUN /home/api
+# docker-compose up
+# testing...
+#WORKDIR /home
 CMD /bin/bash
