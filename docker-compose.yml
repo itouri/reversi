@@ -9,11 +9,17 @@ services:
       - mongo
     depends_on:
       - mongo
+  ws:
+    build: ./websocket/
+    ports:
+    - "23456:23456"
+    links:
+      - api
   mongo:
     image: mongo:latest
     container_name: mongo 
     volumes:
-      - 'mongodb-data:/data/db'
+      - 'mongodb-data:/data/db/mongo'
     ports:
       - '27017:27017'
     command: mongod --smallfiles

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"../../models"
+	"github.com/itouri/reversi/websocket/models"
 )
 
 const (

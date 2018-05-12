@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"../../models"
+	"github.com/itouri/reversi/websocket/models"
 
 	"github.com/gorilla/websocket"
 )

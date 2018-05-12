@@ -37,7 +37,7 @@ func trapReadMsg(s subscription, msg []byte) {
 
 // func sendExit(roomID string, playerID string, connections map[*connection]bool) {
 func sendExit(roomID string, playerID string, conn *connection) {
-	url := "http://localhost:12345/api/v1/rooms/" + roomID + "/" + playerID
+	url := "http://api:12345/api/v1/rooms/" + roomID + "/" + playerID
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
 		log.Println(err)

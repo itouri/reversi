@@ -20,10 +20,13 @@ RUN apt-get install -y git
 ADD . $GOPATH/src/github.com/itouri/reversi
 # install glide
 RUN go get -u github.com/Masterminds/glide/...
+# compile each services
 WORKDIR $GOPATH/src/github.com/itouri/reversi/api
 RUN glide update
 RUN go build -o api
-# compile each services
+WORKDIR $GOPATH/src/github.com/itouri/reversi/websocket
+RUN glide update
+RUN go build -o ws
 #RUN /home/api
 # docker-compose up
 # testing...

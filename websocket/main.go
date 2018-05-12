@@ -1,8 +1,8 @@
 package main
 
 import (
-	"./handlers"
-	"./ws"
+	"github.com/itouri/reversi/websocket/handlers"
+	"github.com/itouri/reversi/websocket/ws"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"

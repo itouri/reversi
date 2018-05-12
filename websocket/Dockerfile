@@ -21,4 +21,4 @@ RUN glide update
 RUN go install
 
 # CMD go run server.go
-CMD ["/bin/sh"]
+CMD go run main.go
