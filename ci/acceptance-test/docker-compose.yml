@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+  api:
+    image: golang:1.8.0-alpine
+    ports:
+      - "12345:12345"
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    volumes:
+      - './elf:/home/elf'
+    command: /home/elf/api
+  ws:
+    image: golang:1.8.0-alpine
+    ports:
+      - "23456:23456"
+    links:
+      - api
+    volumes:
+      - './elf:/home/elf'
+    command: /home/elf/websocket
+  mongo:
+    image: mongo:latest
+    container_name: mongo 
+    volumes:
+      - 'mongodb-data:/data/db/mongo'
+    ports:
+      - '27017:27017'
+    command: mongod --smallfiles
+
+volumes:
+  mongodb-data: {}
