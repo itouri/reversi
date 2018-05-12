@@ -24,12 +24,10 @@ RUN go get -u github.com/Masterminds/glide/...
 # compile each services
 WORKDIR $GOPATH/src/github.com/itouri/reversi/api
 RUN glide update
-RUN go build -o api
-RUN cp api ../ci/acceptance-test/elf
+RUN go build -o /ci/api
 WORKDIR $GOPATH/src/github.com/itouri/reversi/websocket
 RUN glide update
-RUN go build -o websocket
-RUN cp websocket ../ci/acceptance-test/elf
+RUN go build -o /ci/websocket
 # docker-compose up
 WORKDIR $GOPATH/src/github.com/itouri/reversi/ci/acceptance-test
 #WORKDIR /home

@@ -10,8 +10,8 @@ services:
     depends_on:
       - mongo
     volumes:
-      - './elf:/home/elf'
-    command: /home/elf/api
+      - '/tmp/ci:/ci'
+    command: /ci/api
   ws:
     image: golang:1.8.0-alpine
     ports:
@@ -19,8 +19,8 @@ services:
     links:
       - api
     volumes:
-      - './elf:/home/elf'
-    command: /home/elf/websocket
+      - '/tmp/ci:/ci'
+    command: /ci/websocket
   mongo:
     image: mongo:latest
     container_name: mongo 
