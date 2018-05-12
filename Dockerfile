@@ -32,7 +32,5 @@ RUN go build -o websocket
 RUN cp websocket ../ci/acceptance-test/elf
 # docker-compose up
 WORKDIR $GOPATH/src/github.com/itouri/reversi/ci/acceptance-test
-# RUN docker-compose up
-# testing...
 #WORKDIR /home
-CMD /bin/bash
+CMD docker-compose up
