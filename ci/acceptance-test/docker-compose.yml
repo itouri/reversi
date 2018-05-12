@@ -18,6 +18,8 @@ services:
       - "23456:23456"
     links:
       - api
+    depends_on:
+      - mongo
     volumes:
       - '/tmp/ci:/ci'
     command: /ci/websocket

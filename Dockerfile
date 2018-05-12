@@ -24,11 +24,13 @@ RUN go get -u github.com/Masterminds/glide/...
 # compile each services
 WORKDIR $GOPATH/src/github.com/itouri/reversi/api
 RUN glide update
-RUN go build -o /ci/api
+RUN CGO_ENABLED=0 go build -o /cigo/api
 WORKDIR $GOPATH/src/github.com/itouri/reversi/websocket
 RUN glide update
-RUN go build -o /ci/websocket
+RUN CGO_ENABLED=0 go build -o /cigo/websocket
 # docker-compose up
 WORKDIR $GOPATH/src/github.com/itouri/reversi/ci/acceptance-test
 #WORKDIR /home
-CMD docker-compose up
+CMD cp /cigo/api /ci \
+    && cp /cigo/websocket /ci \
+    && docker-compose up
